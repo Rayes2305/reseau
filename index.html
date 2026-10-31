@@ -240,7 +240,7 @@ aside .credit{color:var(--st);border-color:rgba(255,255,255,.18);margin-top:.8re
 const APP_NAME='Ray Com 2.0';
 const SUPABASE_URL='https://odghpbzjaruupkbligmh.supabase.co';
 const SUPABASE_KEY='sb_publishable_r-9HVWtfJJyrcPj4NoCrnw_sxbpvNLa';
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{lock:async(name,timeout,fn)=>await fn()}});
 const $=s=>document.querySelector(s);
 let me=null,P={},isAdmin=false,signup=false,started=false,dms=[],peer=null,seen={},ct=[];
 try{seen=JSON.parse(localStorage.getItem('seen')||'{}')}catch(e){}
