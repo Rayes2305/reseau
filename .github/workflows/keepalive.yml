@@ -1,0 +1,12 @@
+name: Garder Supabase actif
+on:
+  schedule:
+    - cron: '0 6 */3 * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping de la base
+        run: |
+          curl -sS -o /dev/null -w "HTTP %{http_code}\n" "https://odghpbzjaruupkbligmh.supabase.co/rest/v1/rooms?select=id&limit=1" -H "apikey: sb_publishable_r-9HVWtfJJyrcPj4NoCrnw_sxbpvNLa"
