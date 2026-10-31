@@ -314,10 +314,26 @@ $('#f').onsubmit=async e=>{
   }
 };
 $('#out').onclick=()=>{$('#pd').close();sb.auth.signOut()};
-sb.auth.onAuthStateChange((ev,s)=>{if(ev==='PASSWORD_RECOVERY')setTimeout(()=>$('#rcd').showModal(),0);
-  setTimeout(()=>{
-    if(s&&s.user){me=s.user;start()}
-    else{me=null;started=false;sb.removeAllChannels();$('#app').classList.add('hide');$('#auth').classList.remove('hide')}
+function resetState(){
+  P={};dms=[];ct=[];peer=null;rooms=[];room=1;RX={};famIds=new Set();replyTo=null;unreadRoom={};postLimit=30;reps=[];
+  try{localStorage.removeItem('pv3');localStorage.removeItem('pv3t')}catch(e){}
+  ['#chat','#posts','#dc','#pl','#ml'].forEach(q=>{const e=$(q);if(e)e.replaceChildren()});
+  $('#df').classList.add('hide');$('#p3').classList.remove('open');
+  $('#ch').replaceChildren($('#back'),h('span','','Choisissez un collègue'));
+  const rp=$('#rp');if(rp)rp.classList.add('hide');
+}
+sb.auth.onAuthStateChange((ev,s)=>{
+  if(ev==='PASSWORD_RECOVERY')setTimeout(()=>$('#rcd').showModal(),0);
+  setTimeout(async()=>{
+    if(s&&s.user){
+      if(me&&me.id!==s.user.id){started=false;sb.removeAllChannels();resetState()}
+      me=s.user;start();
+    }else if(ev==='SIGNED_OUT'||ev==='INITIAL_SESSION'){
+      const {data}=await sb.auth.getSession();
+      if(data&&data.session)return;
+      me=null;started=false;sb.removeAllChannels();resetState();
+      $('#app').classList.add('hide');$('#auth').classList.remove('hide');
+    }
   },0);
 });
 sb.auth.getSession().then(({data})=>{if(!data.session)$('#auth').classList.remove('hide')});
@@ -325,19 +341,32 @@ sb.auth.getSession().then(({data})=>{if(!data.session)$('#auth').classList.remov
 /* Profils (mis en cache pour économiser la bande passante) */
 async function sync(){
   try{P=JSON.parse(localStorage.getItem('pv3')||'{}')}catch(e){P={}}
-  let last=localStorage.getItem('pv3t')||'1970-01-01T00:00:00Z';
-  const {data}=await sb.from('profiles').select('id,name,avatar,is_admin,updated_at,about,show_email,created_at,suspended,family_only').gt('updated_at',last);
-  (data||[]).forEach(p=>{P[p.id]={name:p.name,avatar:p.avatar,admin:p.is_admin,about:p.about,show:p.show_email,since:p.created_at,susp:p.suspended,famonly:p.family_only};if(p.updated_at>last)last=p.updated_at});
-  try{localStorage.setItem('pv3',JSON.stringify(P));localStorage.setItem('pv3t',last)}catch(e){}
+  const {data}=await sb.from('profiles').select('id,name,is_admin,updated_at,about,show_email,created_at,suspended,family_only');
+  if(!data)return;
+  const nw={},chg=[];
+  data.forEach(p=>{
+    const o=P[p.id],same=o&&o.u===p.updated_at;
+    nw[p.id]={name:p.name,avatar:same?o.avatar:null,u:p.updated_at,admin:p.is_admin,about:p.about,show:p.show_email,since:p.created_at,susp:p.suspended,famonly:p.family_only};
+    if(!same)chg.push(p.id);
+  });
+  P=nw;
+  for(let i=0;i<chg.length;i+=40){
+    const {data:av2}=await sb.from('profiles').select('id,avatar').in('id',chg.slice(i,i+40));
+    (av2||[]).forEach(a=>{if(P[a.id])P[a.id].avatar=a.avatar});
+  }
+  try{localStorage.setItem('pv3',JSON.stringify(P))}catch(e){}
 }
 function chip(){const c=$('#chip');c.replaceChildren(av(me.id,30),h('span','',nm(me.id)))}
 
 async function start(){
   if(started)return;started=true;
+  try{await start0()}catch(e){console.error(e);alert('Erreur au démarrage : '+em(e)+'\nRechargez la page avec Ctrl + F5.')}
+}
+async function start0(){
   $('#auth').classList.add('hide');$('#app').classList.remove('hide');
-  await sync();isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
+  tab(1);await sync();isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
   await initApp();
-  sb.channel('live')
+  sb.channel('live'+Date.now())
    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{if(!P[p.new.user_id])await sync();if(p.new.room_id===room)addMsg(p.new,true);else{unreadRoom[p.new.room_id]=1;drawRooms()}})
    .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const x=document.querySelector('[data-id="'+p.old.id+'"]');if(x)x.remove()})
    .on('postgres_changes',{event:'*',schema:'public',table:'posts'},loadPosts)
