@@ -113,6 +113,13 @@ aside nav button.on .ic{background:var(--hi);color:#142033}
 .po span,.po em{position:relative}
 .po em{font-style:normal;color:var(--mut);font-weight:500}
 @media(max-width:760px){.ic{width:46px;height:30px;border-radius:15px}.ic svg{width:22px;height:22px}.sq{width:110px}}
+.an{font-size:1.4rem;font-weight:800;letter-spacing:-.025em;white-space:nowrap;background:linear-gradient(100deg,#4f9bff,#8b6cff,#ff6fb5,#ffb23e,#4f9bff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:gl 8s linear infinite}
+@keyframes gl{to{background-position:-250% 0}}
+@media(prefers-reduced-motion:reduce){.an{animation:none}}
+#auth .an{font-size:2.3rem}
+aside .brand .logo{width:44px;height:44px}
+.mtop{display:none}
+@media(max-width:760px){.mtop{display:flex;align-items:center;gap:.6rem;padding:.45rem 1rem;background:var(--side)}.mtop .logo{width:34px;height:34px}.mtop .an{font-size:1.3rem}}
 .mlist{flex:1;overflow-y:auto;padding:0 1.25rem 1.25rem;display:grid;gap:.5rem;align-content:start}
 .mr{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:.6rem .8rem;color:var(--tx);text-align:left;width:100%;font-weight:600}
 .mr small{display:block;color:var(--mut);font-weight:400}
@@ -132,7 +139,7 @@ aside .credit{color:var(--st);border-color:rgba(255,255,255,.18);margin-top:.8re
 
 @media(max-width:760px){aside .credit{display:none}}
 @media(max-width:760px){
- #app{grid-template-columns:1fr;grid-template-rows:1fr auto}
+ #app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto}
  aside{order:2;flex-direction:row;padding:.3rem;align-items:center}
  aside .brand,.chip span{display:none}
  aside nav{display:flex;flex:1;justify-content:space-around}
@@ -162,6 +169,7 @@ aside .credit{color:var(--st);border-color:rgba(255,255,255,.18);margin-top:.8re
 </section>
 
 <div id="app" class="hide">
+  <div class="mtop"><span class="logo" id="lg3"></span><span class="an"></span></div>
   <aside>
     <div class="brand"><span class="logo" id="lg1"></span><span class="an"></span></div>
     <nav>
@@ -248,7 +256,7 @@ try{seen=JSON.parse(localStorage.getItem('seen')||'{}')}catch(e){}
 document.title=APP_NAME;
 document.querySelectorAll('.an').forEach(e=>e.textContent=APP_NAME);
 const LOGO='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-label="Ray Com 2.0"><defs><linearGradient id="GID" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#1a3aa6"/></linearGradient></defs><circle cx="32" cy="32" r="32" fill="url(#GID)"/><path d="M18 20q0-6 6-6h16q6 0 6 6v14q0 6-6 6h-9l-8 7v-7q-5 0-5-6z" fill="#fff"/><path fill-rule="evenodd" fill="#1a3aa6" d="M26 19h7.5c3.6 0 5.8 2 5.8 5 0 2.4-1.4 4-3.6 4.7L40 35h-4l-3.2-5h-3.3v5H26zM29.5 22v5h3.7c1.6 0 2.4-.9 2.4-2.5S34.8 22 33.2 22z"/><circle cx="50" cy="14" r="6" fill="#f5b942"/></svg>';
-['lg0','lg1'].forEach((i,n)=>$('#'+i).innerHTML=LOGO.replace(/GID/g,'g'+n));
+['lg0','lg1','lg3'].forEach((i,n)=>$('#'+i).innerHTML=LOGO.replace(/GID/g,'g'+n));
 {const ic=document.createElement('link');ic.rel='icon';ic.href='data:image/svg+xml,'+encodeURIComponent(LOGO.replace(/GID/g,'gf'));document.head.append(ic)}
 
 function h(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
@@ -583,7 +591,7 @@ function addMsg(m,scroll,top){
   const ac=h('div','act');
   const rp=h('button','g','Répondre');rp.onclick=()=>{replyTo={id:m.id,nm:nm(m.user_id),tx:(m.content||'📷 Photo').slice(0,60)};showReply();$('#ci').focus()};ac.append(rp);
   if(!mine){const sg=h('button','g','Signaler');sg.onclick=()=>report('message',m.id);ac.append(sg)}
-  if(mine||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('messages').delete().eq('id',m.id).then(()=>d.remove());ac.append(x)}
+  if(mine||isAdmin){const x=h('button','g','Supprimer');x.onclick=async()=>{const {error}=await sb.from('messages').delete().eq('id',m.id);if(error)alert(em(error));else d.remove()};ac.append(x)}
   b.append(ac);
   d.append(av(m.user_id,34),b);
   const near=c.scrollHeight-c.scrollTop-c.clientHeight<120;
@@ -689,13 +697,13 @@ async function loadPosts(){
     const ac=h('div','act');
     if(isAdmin){const x=h('button','g',p.pinned?'Désépingler':'Épingler');x.onclick=async()=>{const {error}=await sb.rpc('admin_pin',{pid:p.id,flag:!p.pinned});if(error)alert(em(error));else loadPosts()};ac.append(x)}
     if(p.user_id!==me.id){const sg=h('button','g','Signaler');sg.onclick=()=>report('post',p.id);ac.append(sg)}
-    if(p.user_id===me.id||isAdmin){const x=h('button','g','Supprimer la publication');x.onclick=()=>confirm('Supprimer cette publication ?')&&sb.from('posts').delete().eq('id',p.id);ac.append(x)}
+    if(p.user_id===me.id||isAdmin){const x=h('button','g','Supprimer la publication');x.onclick=async()=>{if(!confirm('Supprimer cette publication ?'))return;const {error}=await sb.from('posts').delete().eq('id',p.id);if(error)alert(em(error));else loadPosts()};ac.append(x)}
     d.append(ac);
     (p.comments||[]).sort((x,y)=>x.created_at<y.created_at?-1:1).forEach(c=>{
       const k=h('div','cm'),b=h('div'),ca=h('div','act');
       b.append(whoEl(c.user_id,c.created_at),txtEl(c.content));
       if(c.user_id!==me.id){const sg=h('button','g','Signaler');sg.onclick=()=>report('comment',c.id);ca.append(sg)}
-      if(c.user_id===me.id||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('comments').delete().eq('id',c.id);ca.append(x)}
+      if(c.user_id===me.id||isAdmin){const x=h('button','g','Supprimer');x.onclick=async()=>{const {error}=await sb.from('comments').delete().eq('id',c.id);if(error)alert(em(error));else loadPosts()};ca.append(x)}
       b.append(ca);k.append(av(c.user_id,26),b);d.append(k);
     });
     const f=h('form','cform'),i=h('input');i.placeholder='Écrire un commentaire';i.maxLength=1000;
