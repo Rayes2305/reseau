@@ -86,6 +86,16 @@ aside nav button{font-weight:600}
 #lb{padding:0;border:0;background:none;width:auto;max-width:96vw}
 #lb img{max-width:96vw;max-height:92vh;border-radius:8px;display:block}
 #lb::backdrop{background:rgba(0,0,0,.82)}
+.mlist{flex:1;overflow-y:auto;padding:0 1.25rem 1.25rem;display:grid;gap:.5rem;align-content:start}
+.mr{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:.6rem .8rem;color:var(--tx);text-align:left;width:100%;font-weight:600}
+.mr small{display:block;color:var(--mut);font-weight:400}
+.tag{background:var(--hi);color:#142033;border-radius:99px;font-size:.68rem;padding:.05rem .5rem;font-weight:700;margin-left:.4rem}
+.sm{padding:.3rem .6rem;font-size:.8rem}
+.credit{font-size:.72rem;line-height:1.5;color:var(--mut);margin-top:1rem}
+.credit a{color:inherit;text-decoration:underline}
+aside .credit{color:var(--st);opacity:.85;margin-top:.7rem}
+#pd .credit{border-top:1px solid var(--bd);padding-top:.7rem}
+@media(max-width:760px){aside .credit{display:none}}
 @media(max-width:760px){
  #app{grid-template-columns:1fr;grid-template-rows:1fr auto}
  aside{order:2;flex-direction:row;padding:.3rem;align-items:center}
@@ -122,6 +132,7 @@ aside nav button{font-weight:600}
     <nav>
       <button id="t1" class="on"><span>💬</span>Discussion</button>
       <button id="t2"><span>📰</span>Publications</button>
+      <button id="t4"><span>👥</span>Membres</button>
       <button id="t3"><span>✉️</span>Privé<b class="badge hide" id="bd"></b></button>
     </nav>
     <button class="chip" id="chip"></button>
@@ -139,6 +150,7 @@ aside nav button{font-weight:600}
         <div id="posts" style="display:grid;gap:1rem"></div>
       </div>
     </section>
+    <section id="p4" class="pane hide"><h2>Membres</h2><div style="padding:.75rem 1.25rem"><input id="ms" placeholder="Rechercher un membre"></div><div id="ml" class="mlist"></div></section>
     <section id="p3" class="pane dm hide">
       <div id="peers"><h2>Messages privés</h2><input id="ps" placeholder="Chercher un collègue"><div id="pl"></div></div>
       <div id="conv">
@@ -155,9 +167,19 @@ aside nav button{font-weight:600}
   <input type="file" id="pf0" accept="image/*" style="margin-top:.8rem">
   <div class="er" id="er"></div>
   <input id="pn" placeholder="Votre nom" maxlength="40">
+  <input id="pa" placeholder="Poste ou courte présentation" maxlength="120" style="margin-top:.5rem">
+  <div class="who" style="margin-top:.6rem">Votre e-mail : <b id="pe"></b></div>
+  <label class="who" style="display:flex;gap:.5rem;align-items:center;margin-top:.3rem"><input type="checkbox" id="pse" style="width:auto"> Montrer mon e-mail à mes collègues</label>
   <div style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap">
     <button id="sv">Enregistrer</button><button class="g" id="rm" type="button">Retirer la photo</button><button class="g" id="cl" type="button">Fermer</button><button class="g" id="out" type="button" style="margin-left:auto">Se déconnecter</button>
   </div>
+</dialog>
+<dialog id="md">
+  <div style="display:flex;gap:.8rem;align-items:center"><span id="mdav"></span><div><strong id="mdn" style="font-size:1.1rem"></strong><div class="who" id="mdi"></div></div></div>
+  <p id="mda" style="margin:.8rem 0 .4rem"></p>
+  <div class="who" id="mde"></div><div class="who" id="mds"></div>
+  <div id="mdx" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem"></div>
+  <div style="margin-top:.8rem"><button class="g" id="mdc" type="button">Fermer</button></div>
 </dialog>
 <dialog id="lb"><img alt=""></dialog>
 <div id="ep" class="hide"></div>
@@ -169,7 +191,7 @@ const SUPABASE_URL='https://odghpbzjaruupkbligmh.supabase.co';
 const SUPABASE_KEY='sb_publishable_r-9HVWtfJJyrcPj4NoCrnw_sxbpvNLa';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const $=s=>document.querySelector(s);
-let me=null,P={},isAdmin=false,signup=false,started=false,dms=[],peer=null,seen={};
+let me=null,P={},isAdmin=false,signup=false,started=false,dms=[],peer=null,seen={},ct=[];
 try{seen=JSON.parse(localStorage.getItem('seen')||'{}')}catch(e){}
 
 document.title=APP_NAME;
@@ -243,11 +265,11 @@ sb.auth.getSession().then(({data})=>{if(!data.session)$('#auth').classList.remov
 
 /* Profils (mis en cache pour économiser la bande passante) */
 async function sync(){
-  try{P=JSON.parse(localStorage.getItem('pv1')||'{}')}catch(e){P={}}
-  let last=localStorage.getItem('pv1t')||'1970-01-01T00:00:00Z';
-  const {data}=await sb.from('profiles').select('id,name,avatar,is_admin,updated_at').gt('updated_at',last);
-  (data||[]).forEach(p=>{P[p.id]={name:p.name,avatar:p.avatar,admin:p.is_admin};if(p.updated_at>last)last=p.updated_at});
-  try{localStorage.setItem('pv1',JSON.stringify(P));localStorage.setItem('pv1t',last)}catch(e){}
+  try{P=JSON.parse(localStorage.getItem('pv2')||'{}')}catch(e){P={}}
+  let last=localStorage.getItem('pv2t')||'1970-01-01T00:00:00Z';
+  const {data}=await sb.from('profiles').select('id,name,avatar,is_admin,updated_at,about,show_email,created_at').gt('updated_at',last);
+  (data||[]).forEach(p=>{P[p.id]={name:p.name,avatar:p.avatar,admin:p.is_admin,about:p.about,show:p.show_email,since:p.created_at};if(p.updated_at>last)last=p.updated_at});
+  try{localStorage.setItem('pv2',JSON.stringify(P));localStorage.setItem('pv2t',last)}catch(e){}
 }
 function chip(){const c=$('#chip');c.replaceChildren(av(me.id,30),h('span','',nm(me.id)))}
 
@@ -255,24 +277,26 @@ async function start(){
   if(started)return;started=true;
   $('#auth').classList.add('hide');$('#app').classList.remove('hide');
   await sync();isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
-  await Promise.all([loadChat(),loadPosts(),loadDms()]);
+  await Promise.all([loadChat(),loadPosts(),loadDms(),loadContacts()]);
   sb.channel('live')
    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{if(!P[p.new.user_id])await sync();addMsg(p.new,true)})
    .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const x=document.querySelector('[data-id="'+p.old.id+'"]');if(x)x.remove()})
    .on('postgres_changes',{event:'*',schema:'public',table:'posts'},loadPosts)
    .on('postgres_changes',{event:'*',schema:'public',table:'comments'},loadPosts)
    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dms'},p=>gotDm(p.new))
+   .on('postgres_changes',{event:'*',schema:'public',table:'contacts'},loadContacts)
    .subscribe();
 }
 
 /* Onglets */
 function tab(n){
-  [1,2,3].forEach(i=>{$('#p'+i).classList.toggle('hide',i!==n);$('#t'+i).classList.toggle('on',i===n)});
+  [1,2,3,4].forEach(i=>{$('#p'+i).classList.toggle('hide',i!==n);$('#t'+i).classList.toggle('on',i===n)});
   if(n===1){const c=$('#chat');c.scrollTop=c.scrollHeight}
   if(n===3){renderPeers();if(peer)markSeen(peer)}
+  if(n===4)renderMembers();
 }
-[1,2,3].forEach(i=>$('#t'+i).onclick=()=>tab(i));
-$('#chip').onclick=()=>{draft=(P[me.id]&&P[me.id].avatar)||'';$('#pn').value=nm(me.id);drawPrev();$('#pd').showModal()};
+[1,2,3,4].forEach(i=>$('#t'+i).onclick=()=>tab(i));
+$('#chip').onclick=()=>{draft=(P[me.id]&&P[me.id].avatar)||'';$('#pn').value=nm(me.id);$('#pa').value=(P[me.id]&&P[me.id].about)||'';$('#pe').textContent=me.email;$('#pse').checked=!!(P[me.id]&&P[me.id].show);drawPrev();$('#pd').showModal()};
 
 /* Emojis */
 const EM='😀😁😂🤣😊😍🥰😎🤔😅😭😡👍👎👏🙏💪🎉🔥✨❤️💙✅❌⚠️📌📎📅☕🍀🌟🚀👀🤝🙌😴🤯🥳😉😇🙂🙃😬😮😢🤗'.match(/\p{Extended_Pictographic}\uFE0F?/gu);
@@ -366,7 +390,7 @@ function markSeen(o){
   badge();renderPeers();
 }
 function badge(){
-  const n=Object.keys(P).reduce((s,o)=>s+(o===me.id?0:unread(o)),0),b=$('#bd');
+  const n=Object.keys(P).reduce((s,o)=>s+(o===me.id?0:unread(o)),0)+ct.filter(c=>c.addressee===me.id&&c.status==='pending').length,b=$('#bd');
   b.textContent=n;b.classList.toggle('hide',!n);
 }
 async function loadDms(){
@@ -375,8 +399,8 @@ async function loadDms(){
 }
 function renderPeers(){
   const q=$('#ps').value.trim().toLowerCase(),box=$('#pl');box.replaceChildren();
-  const last={};dms.forEach(d=>last[other(d)]=d);
-  Object.keys(P).filter(id=>id!==me.id&&nm(id).toLowerCase().includes(q))
+  const last={};dms.forEach(d=>last[other(d)]=d);reqRows(box);
+  contactIds().filter(id=>nm(id).toLowerCase().includes(q))
    .sort((a,b)=>(last[b]?last[b].created_at:'').localeCompare(last[a]?last[a].created_at:'')||nm(a).localeCompare(nm(b)))
    .forEach(id=>{
      const b=h('button','pr'+(id===peer?' on':'')),t=h('div'),n=unread(id);
@@ -385,7 +409,7 @@ function renderPeers(){
      if(n)b.append(h('b','badge',n));
      b.onclick=()=>openPeer(id);box.append(b);
    });
-  if(!box.children.length)box.append(h('div','empty','Aucun collègue trouvé.'));
+  if(!box.children.length)box.append(h('div','empty','Aucun contact pour le moment. Envoyez une demande depuis l’onglet Membres.'));
 }
 $('#ps').oninput=renderPeers;
 function bubble(d){
@@ -419,6 +443,65 @@ $('#df').onsubmit=async e=>{
   gotDm(data);
 };
 
+/* Membres et contacts */
+const rel=id=>ct.find(c=>(c.requester===me.id&&c.addressee===id)||(c.requester===id&&c.addressee===me.id));
+const contactIds=()=>ct.filter(c=>c.status==='accepted').map(c=>c.requester===me.id?c.addressee:c.requester);
+async function loadContacts(){
+  const {data}=await sb.from('contacts').select('*');
+  ct=data||[];badge();renderPeers();
+  if($('#md').open)drawActions($('#md').dataset.id);
+}
+function reqRows(box){
+  ct.filter(c=>c.addressee===me.id&&c.status==='pending').forEach(c=>{
+    const d=h('div','pr'),t=h('div'),a=h('button','sm','Accepter'),n=h('button','g sm','Décliner');
+    t.append(h('div','',nm(c.requester)),h('small','','Demande de contact'));
+    a.onclick=()=>sb.from('contacts').update({status:'accepted'}).eq('id',c.id).then(loadContacts);
+    n.onclick=()=>sb.from('contacts').delete().eq('id',c.id).then(loadContacts);
+    d.append(av(c.requester,38),t,a,n);box.append(d);
+  });
+}
+function renderMembers(){
+  const q=$('#ms').value.trim().toLowerCase(),box=$('#ml');box.replaceChildren();
+  Object.keys(P).sort((a,b)=>nm(a).localeCompare(nm(b))).filter(id=>nm(id).toLowerCase().includes(q)).forEach(id=>{
+    const b=h('button','mr'),t=h('div'),n=h('div');
+    n.append(nm(id));if(P[id].admin)n.append(h('span','tag','Admin'));if(id===me.id)n.append(h('span','tag','Vous'));
+    t.append(n);if(P[id].about)t.append(h('small','',P[id].about));
+    b.append(av(id,42),t);b.onclick=()=>openMember(id);box.append(b);
+  });
+  $('#p4 h2').textContent='Membres ('+Object.keys(P).length+')';
+}
+$('#ms').oninput=renderMembers;
+function drawActions(id){
+  const box=$('#mdx');box.replaceChildren();if(id===me.id)return;
+  const r0=rel(id);
+  const btn=(t,f,cls)=>{const b=h('button',cls||'',t);b.onclick=async()=>{b.disabled=true;const {error}=await f();if(error)alert(error.message);loadContacts()};box.append(b)};
+  if(!r0)btn('Envoyer une demande de contact',()=>sb.from('contacts').insert({addressee:id}));
+  else if(r0.status==='accepted'){
+    const w=h('button','','Écrire un message');w.onclick=()=>{$('#md').close();tab(3);openPeer(id)};box.append(w);
+    btn('Retirer des contacts',()=>sb.from('contacts').delete().eq('id',r0.id),'g');
+  }else if(r0.addressee===me.id){
+    btn('Accepter la demande',()=>sb.from('contacts').update({status:'accepted'}).eq('id',r0.id));
+    btn('Décliner',()=>sb.from('contacts').delete().eq('id',r0.id),'g');
+  }else btn('Demande envoyée · annuler',()=>sb.from('contacts').delete().eq('id',r0.id),'g');
+}
+async function openMember(id){
+  const p=P[id]||{};
+  $('#md').dataset.id=id;
+  $('#mdav').replaceChildren(av(id,64));$('#mdn').textContent=nm(id);
+  $('#mdi').textContent=(p.admin?'Administrateur':'Membre')+(id===me.id?' · c’est vous':'');
+  $('#mda').textContent=p.about||'Aucune présentation.';
+  $('#mds').textContent=p.since?'Membre depuis le '+new Date(p.since).toLocaleDateString('fr-FR'):'';
+  $('#mde').textContent='E-mail : …';
+  drawActions(id);$('#md').showModal();
+  const {data}=await sb.from('emails').select('email').eq('id',id).maybeSingle();
+  $('#mde').textContent=data?'E-mail : '+data.email:'E-mail : masqué par ce membre';
+}
+$('#mdc').onclick=()=>$('#md').close();
+
+/* Crédits */
+function credit(el){el.innerHTML='<div>Conçu et développé par <b>Joel NDRIAMPARANY</b></div><div><b>RAY DIGITAL SERVICE</b> · Assistance et développement</div><div><a href="mailto:inforayes@gmail.com">inforayes@gmail.com</a> · <a href="https://wa.me/261345250652" target="_blank" rel="noopener">WhatsApp 034 52 506 52</a></div>'}
+[$('#auth'),$('aside'),$('#pd')].forEach(box=>{const x=h('div','credit');credit(x);box.append(x)});
+
 /* Profil */
 let draft='';
 function drawPrev(){$('#prev').replaceChildren(avx(draft,$('#pn').value||nm(me.id),me.id,56))}
@@ -439,11 +522,11 @@ $('#pf0').onchange=e=>{
   i.src=URL.createObjectURL(f);
 };
 $('#sv').onclick=async()=>{
-  const name=$('#pn').value.trim()||nm(me.id);
-  const {error}=await sb.from('profiles').update({name,avatar:draft||null}).eq('id',me.id);
+  const name=$('#pn').value.trim()||nm(me.id),about=$('#pa').value.trim()||null,show=$('#pse').checked;
+  const {error}=await sb.from('profiles').update({name,avatar:draft||null,about,show_email:show}).eq('id',me.id);
   if(error)return alert('Profil non enregistré : '+error.message);
-  P[me.id]={name,avatar:draft||null,admin:isAdmin};
-  try{localStorage.setItem('pv1',JSON.stringify(P))}catch(e){}
+  P[me.id]={name,avatar:draft||null,admin:isAdmin,about,show,since:P[me.id]&&P[me.id].since};
+  try{localStorage.setItem('pv2',JSON.stringify(P))}catch(e){}
   chip();$('#pd').close();loadChat();loadPosts();renderPeers();
 };
 </script>
