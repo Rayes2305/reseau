@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Notre réseau</title>
+<title>Ray Com 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f2f4f7;--card:#fff;--tx:#142033;--mut:#64748b;--ac:#0b4f6c;--acx:#fff;--bd:#dde3ea;--me:#e1eff5;--side:#0d2438;--st:#c9d6e2;--hi:#e8a33d}
-@media(prefers-color-scheme:dark){:root{--bg:#0e1621;--card:#162231;--tx:#e5ecf3;--mut:#8fa1b3;--ac:#4fb3d9;--acx:#04202c;--bd:#26364a;--me:#17394a;--side:#0a1a29}}
+:root{--bg:#e6eefb;--card:#fff;--tx:#0f1b3d;--mut:#5b6b8c;--ac:#1d4ed8;--acx:#fff;--bd:#cfdaf0;--me:#dbe7ff;--side:#0b2a6f;--st:#c7d6f5;--hi:#f5b942}
+@media(prefers-color-scheme:dark){:root{--bg:#0a1430;--card:#111f45;--tx:#e8eeff;--mut:#93a4cc;--ac:#6ea8ff;--acx:#06173d;--bd:#223566;--me:#1a2f63;--side:#071030}}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
@@ -17,7 +18,7 @@ button.g{background:none;color:var(--mut);padding:.15rem .4rem;font-weight:400;f
 input,textarea{width:100%;padding:.6rem .75rem;border:1px solid var(--bd);border-radius:8px;background:var(--card)}
 textarea{resize:vertical;min-height:80px}
 .hide{display:none!important}
-.logo{width:34px;height:34px;border-radius:9px;background:var(--hi);color:#142033;display:grid;place-items:center;font-weight:800;flex:none}
+.logo{width:38px;height:38px;display:block;flex:none}.logo svg{width:100%;height:100%;display:block}
 #auth{max-width:380px;margin:0 auto;padding:10vh 1.25rem 2rem}
 #auth .brand{display:flex;align-items:center;gap:.7rem;font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
 #auth p{color:var(--mut);margin:0 0 1.25rem}
@@ -70,6 +71,21 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
 .er button{background:var(--bg);font-size:1.2rem;padding:.2rem .4rem}
 #ep{position:fixed;z-index:9;display:grid;grid-template-columns:repeat(8,1fr);gap:2px;width:272px;padding:6px;background:var(--card);border:1px solid var(--bd);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.2)}
 #ep button{background:none;font-size:1.25rem;padding:.2rem}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font-family:inherit}
+h2{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.an{font-weight:800;letter-spacing:-.02em;font-size:1.05rem}
+#auth .an{font-size:1.7rem}#auth .logo{width:56px;height:56px}
+aside nav button{font-weight:600}
+.nm{font-weight:700;color:var(--ac)}
+.who{font-weight:500;font-size:.75rem}
+.mb,.b{font-size:.95rem}
+.pic{display:block;max-width:100%;max-height:320px;border-radius:10px;margin-top:.4rem;cursor:zoom-in;object-fit:cover}
+.post .pic{margin:.3rem 0 .8rem}
+.pc{font-size:.8rem;color:var(--ac);cursor:pointer;white-space:nowrap;align-self:center;font-weight:600}
+#lb{padding:0;border:0;background:none;width:auto;max-width:96vw}
+#lb img{max-width:96vw;max-height:92vh;border-radius:8px;display:block}
+#lb::backdrop{background:rgba(0,0,0,.82)}
 @media(max-width:760px){
  #app{grid-template-columns:1fr;grid-template-rows:1fr auto}
  aside{order:2;flex-direction:row;padding:.3rem;align-items:center}
@@ -143,11 +159,12 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     <button id="sv">Enregistrer</button><button class="g" id="rm" type="button">Retirer la photo</button><button class="g" id="cl" type="button">Fermer</button><button class="g" id="out" type="button" style="margin-left:auto">Se déconnecter</button>
   </div>
 </dialog>
+<dialog id="lb"><img alt=""></dialog>
 <div id="ep" class="hide"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
-const APP_NAME='Notre réseau';
+const APP_NAME='Ray Com 2.0';
 const SUPABASE_URL='https://odghpbzjaruupkbligmh.supabase.co';
 const SUPABASE_KEY='sb_publishable_r-9HVWtfJJyrcPj4NoCrnw_sxbpvNLa';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -157,11 +174,31 @@ try{seen=JSON.parse(localStorage.getItem('seen')||'{}')}catch(e){}
 
 document.title=APP_NAME;
 document.querySelectorAll('.an').forEach(e=>e.textContent=APP_NAME);
-['lg0','lg1'].forEach(i=>$('#'+i).textContent=APP_NAME.trim()[0].toUpperCase());
+const LOGO='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" aria-label="Ray Com 2.0"><defs><linearGradient id="GID" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5aa2ff"/><stop offset="1" stop-color="#1a3aa6"/></linearGradient></defs><circle cx="32" cy="32" r="32" fill="url(#GID)"/><path d="M18 20q0-6 6-6h16q6 0 6 6v14q0 6-6 6h-9l-8 7v-7q-5 0-5-6z" fill="#fff"/><path fill-rule="evenodd" fill="#1a3aa6" d="M26 19h7.5c3.6 0 5.8 2 5.8 5 0 2.4-1.4 4-3.6 4.7L40 35h-4l-3.2-5h-3.3v5H26zM29.5 22v5h3.7c1.6 0 2.4-.9 2.4-2.5S34.8 22 33.2 22z"/><circle cx="50" cy="14" r="6" fill="#f5b942"/></svg>';
+['lg0','lg1'].forEach((i,n)=>$('#'+i).innerHTML=LOGO.replace(/GID/g,'g'+n));
+{const ic=document.createElement('link');ic.rel='icon';ic.href='data:image/svg+xml,'+encodeURIComponent(LOGO.replace(/GID/g,'gf'));document.head.append(ic)}
 
 function h(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
 const when=t=>new Date(t).toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'});
 const nm=id=>(P[id]&&P[id].name)||'Collègue';
+function whoEl(id,t){const d=h('div','who');d.append(h('b','nm',nm(id)),' · '+when(t));return d}
+function imgEl(u){if(!u||!u.startsWith(SUPABASE_URL))return null;const i=h('img','pic');i.src=u;i.alt='Photo';i.loading='lazy';i.onclick=()=>{$('#lb img').src=u;$('#lb').showModal()};return i}
+$('#lb').onclick=()=>$('#lb').close();
+function shrinkImg(file,max){return new Promise((ok,ko)=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);c.toBlob(b=>b?ok(b):ko(),'image/jpeg',.78)};i.onerror=ko;i.src=URL.createObjectURL(file)})}
+const att={},chips={};
+function clr(k){delete att[k];if(chips[k])chips[k].classList.add('hide')}
+function addPhoto(form,key,before){
+  const b=h('button','em','📷'),f=h('input'),c=h('span','pc hide');
+  b.type='button';b.title='Envoyer une photo';f.type='file';f.accept='image/*';f.className='hide';chips[key]=c;
+  f.onchange=async()=>{const x=f.files[0];f.value='';if(!x)return;try{att[key]=await shrinkImg(x,1280);c.textContent='📷 Photo jointe ✕';c.classList.remove('hide')}catch(e){alert('Image illisible.')}};
+  c.onclick=()=>clr(key);b.onclick=()=>f.click();
+  [c,b,f].forEach(e=>form.insertBefore(e,before));
+}
+async function up(k){
+  const b=att[k];if(!b)return null;
+  const p=me.id+'/'+crypto.randomUUID()+'.jpg',{error}=await sb.storage.from('photos').upload(p,b,{contentType:'image/jpeg'});
+  if(error)throw error;clr(k);return sb.storage.from('photos').getPublicUrl(p).data.publicUrl;
+}
 function say(t,ok){const m=$('#msg');m.textContent=t;m.className=ok?'ok':''}
 
 /* Avatars */
@@ -251,6 +288,9 @@ document.addEventListener('click',e=>{if(!e.target.closest('#ep'))$('#ep').class
 $('#cf').insertBefore(emBtn($('#ci')),$('#cf button'));
 $('#df').insertBefore(emBtn($('#di')),$('#df button'));
 $('#pf div').prepend(emBtn($('#pi')));
+addPhoto($('#cf'),'c',$('#cf button:not(.em)'));
+addPhoto($('#df'),'d',$('#df button:not(.em)'));
+addPhoto($('#pf div'),'p',$('#pf div button:not(.em)'));
 
 /* Discussion générale */
 function addMsg(m,scroll){
@@ -259,7 +299,7 @@ function addMsg(m,scroll){
   const e0=c.querySelector('.empty');if(e0)e0.remove();
   const mine=m.user_id===me.id,d=h('div','m'+(mine?' me':''));d.dataset.id=m.id;
   const b=h('div','mb');
-  b.append(h('div','who',nm(m.user_id)+', '+when(m.created_at)),h('div','',m.content));
+  b.append(whoEl(m.user_id,m.created_at));if(m.content)b.append(h('div','',m.content));{const pi=imgEl(m.image);if(pi)b.append(pi)}
   if(mine||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('messages').delete().eq('id',m.id).then(()=>d.remove());b.append(x)}
   d.append(av(m.user_id,34),b);
   const near=c.scrollHeight-c.scrollTop-c.clientHeight<120;
@@ -274,9 +314,9 @@ async function loadChat(){
 }
 $('#cf').onsubmit=async e=>{
   e.preventDefault();
-  const t=$('#ci').value.trim();if(!t)return;
+  const t=$('#ci').value.trim();if(!t&&!att.c)return;let image=null;try{image=await up('c')}catch(x){return alert('Photo non envoyée : '+x.message)}
   $('#ci').value='';
-  const {error}=await sb.from('messages').insert({content:t});
+  const {error}=await sb.from('messages').insert({content:t,image});
   if(error)alert('Message non envoyé : '+error.message);
 };
 
@@ -291,7 +331,7 @@ async function loadPosts(){
     const d=h('article','post'),hd=h('div','ph'),w=h('div');
     w.append(h('strong','',nm(p.user_id)),h('div','who',when(p.created_at)));
     hd.append(av(p.user_id,40),w);
-    d.append(hd,h('p','',p.content));
+    d.append(hd);if(p.content)d.append(h('p','',p.content));{const pi=imgEl(p.image);if(pi)d.append(pi)}
     if(p.user_id===me.id||isAdmin){
       const x=h('button','g','Supprimer la publication');
       x.onclick=()=>confirm('Supprimer cette publication ?')&&sb.from('posts').delete().eq('id',p.id);
@@ -299,7 +339,7 @@ async function loadPosts(){
     }
     (p.comments||[]).sort((a,b)=>a.created_at<b.created_at?-1:1).forEach(c=>{
       const k=h('div','cm'),b=h('div');
-      b.append(h('div','who',nm(c.user_id)+', '+when(c.created_at)),h('div','',c.content));
+      b.append(whoEl(c.user_id,c.created_at),h('div','',c.content));
       if(c.user_id===me.id||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('comments').delete().eq('id',c.id);b.append(x)}
       k.append(av(c.user_id,26),b);d.append(k);
     });
@@ -311,8 +351,8 @@ async function loadPosts(){
 }
 $('#pf').onsubmit=async e=>{
   e.preventDefault();
-  const t=$('#pi').value.trim();if(!t)return;
-  const {error}=await sb.from('posts').insert({content:t});
+  const t=$('#pi').value.trim();if(!t&&!att.p)return;let image=null;try{image=await up('p')}catch(x){return alert('Photo non envoyée : '+x.message)}
+  const {error}=await sb.from('posts').insert({content:t,image});
   if(error)return alert('Publication non envoyée : '+error.message);
   $('#pi').value='';
 };
@@ -340,7 +380,7 @@ function renderPeers(){
    .sort((a,b)=>(last[b]?last[b].created_at:'').localeCompare(last[a]?last[a].created_at:'')||nm(a).localeCompare(nm(b)))
    .forEach(id=>{
      const b=h('button','pr'+(id===peer?' on':'')),t=h('div'),n=unread(id);
-     t.append(h('div','',nm(id)));if(last[id])t.append(h('small','',(last[id].sender===me.id?'Vous : ':'')+last[id].content));
+     t.append(h('div','',nm(id)));if(last[id])t.append(h('small','',(last[id].sender===me.id?'Vous : ':'')+(last[id].content||'📷 Photo')));
      b.append(av(id,38),t);
      if(n)b.append(h('b','badge',n));
      b.onclick=()=>openPeer(id);box.append(b);
@@ -351,7 +391,7 @@ $('#ps').oninput=renderPeers;
 function bubble(d){
   if(document.querySelector('[data-d="'+d.id+'"]'))return;
   const c=$('#dc'),b=h('div','b'+(d.sender===me.id?' me':''));b.dataset.d=d.id;
-  b.append(h('div','',d.content),h('div','who',when(d.created_at)));
+  if(d.content)b.append(h('div','',d.content));{const pi=imgEl(d.image);if(pi)b.append(pi)}b.append(h('div','who',when(d.created_at)));
   c.append(b);c.scrollTop=c.scrollHeight;
 }
 function openPeer(id){
@@ -372,9 +412,9 @@ async function gotDm(d){
 }
 $('#df').onsubmit=async e=>{
   e.preventDefault();
-  const t=$('#di').value.trim();if(!t||!peer)return;
+  const t=$('#di').value.trim();if((!t&&!att.d)||!peer)return;let image=null;try{image=await up('d')}catch(x){return alert('Photo non envoyée : '+x.message)}
   $('#di').value='';
-  const {data,error}=await sb.from('dms').insert({recipient:peer,content:t}).select().single();
+  const {data,error}=await sb.from('dms').insert({recipient:peer,content:t,image}).select().single();
   if(error)return alert('Message non envoyé : '+error.message);
   gotDm(data);
 };
