@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ray Com 2.0</title>
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0b2a6f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ray Com">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#e6eefb;--card:#fff;--tx:#0f1b3d;--mut:#5b6b8c;--ac:#1d4ed8;--acx:#fff;--bd:#cfdaf0;--me:#dbe7ff;--side:#0b2a6f;--st:#c7d6f5;--hi:#f5b942}
@@ -86,15 +87,49 @@ aside nav button{font-weight:600}
 #lb{padding:0;border:0;background:none;width:auto;max-width:96vw}
 #lb img{max-width:96vw;max-height:92vh;border-radius:8px;display:block}
 #lb::backdrop{background:rgba(0,0,0,.82)}
+.ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.08);flex:none}
+.ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+aside nav button{gap:.8rem;font-size:.95rem}
+aside nav button.on .ic{background:var(--hi);color:#142033}
+.rbar{display:flex;gap:.5rem;align-items:center;padding:.5rem 1.25rem;border-bottom:1px solid var(--bd);background:var(--card)}
+.rb{display:flex;gap:.4rem;overflow-x:auto;flex:1;scrollbar-width:none}
+.rc{position:relative;background:var(--bg);color:var(--tx);border-radius:99px;padding:.3rem .85rem;white-space:nowrap;font-weight:600;font-size:.85rem}
+.rc.on{background:var(--ac);color:var(--acx)}
+.rc .dot{position:absolute;top:1px;right:3px;width:9px;height:9px;border-radius:50%;background:var(--hi)}
+.sq{width:150px;padding:.35rem .7rem;font-size:.85rem}
+.rp{padding:.4rem 1.25rem;font-size:.82rem;color:var(--ac);background:var(--me);cursor:pointer;border-top:1px solid var(--bd)}
+.qt{font-size:.78rem;color:var(--mut);border-left:3px solid var(--ac);padding-left:.5rem;margin:.2rem 0}
+.act{display:flex;gap:.25rem;flex-wrap:wrap}
+.rx{display:flex;gap:.3rem;flex-wrap:wrap;margin:.35rem 0}
+.rb2{background:var(--bg);color:var(--tx);border:1px solid var(--bd);border-radius:99px;padding:.05rem .55rem;font-size:.82rem;font-weight:600}
+.rb2.on{background:var(--me);border-color:var(--ac)}
+.mn{border-color:var(--hi);box-shadow:0 0 0 2px rgba(245,185,66,.35)}
+.mt{color:var(--ac);font-weight:700}
+.post.pin{border-color:var(--hi);box-shadow:0 0 0 2px rgba(245,185,66,.3)}
+.poll{display:grid;gap:.4rem;margin:.4rem 0 .8rem}
+.po{position:relative;display:flex;justify-content:space-between;gap:.5rem;background:var(--bg);color:var(--tx);border:1px solid var(--bd);text-align:left;overflow:hidden;font-weight:600}
+.po.on{border-color:var(--ac)}
+.po .pb{position:absolute;left:0;top:0;bottom:0;background:var(--me)}
+.po span,.po em{position:relative}
+.po em{font-style:normal;color:var(--mut);font-weight:500}
+@media(max-width:760px){.ic{width:46px;height:30px;border-radius:15px}.ic svg{width:22px;height:22px}.sq{width:110px}}
 .mlist{flex:1;overflow-y:auto;padding:0 1.25rem 1.25rem;display:grid;gap:.5rem;align-content:start}
 .mr{display:flex;align-items:center;gap:.75rem;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:.6rem .8rem;color:var(--tx);text-align:left;width:100%;font-weight:600}
 .mr small{display:block;color:var(--mut);font-weight:400}
 .tag{background:var(--hi);color:#142033;border-radius:99px;font-size:.68rem;padding:.05rem .5rem;font-weight:700;margin-left:.4rem}
 .sm{padding:.3rem .6rem;font-size:.8rem}
-.credit{font-size:.72rem;line-height:1.5;color:var(--mut);margin-top:1rem}
-.credit a{color:inherit;text-decoration:underline}
-aside .credit{color:var(--st);opacity:.85;margin-top:.7rem}
-#pd .credit{border-top:1px solid var(--bd);padding-top:.7rem}
+.credit{display:block;width:100%;text-align:center;background:none;color:var(--mut);font-weight:500;border-radius:0;padding:.8rem .5rem 0;margin-top:1rem;line-height:1.35;border-top:1px solid var(--bd)}
+.credit small{display:block;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
+.credit b{display:block;font-size:.82rem;letter-spacing:.14em;color:var(--tx);font-weight:800;margin:.2rem 0}
+.credit span{display:block;font-size:.7rem}
+.credit:hover b{color:var(--ac)}
+#auth .credit{margin-top:2.5rem}
+.rds{width:54px;height:54px;border-radius:50%;margin:0 auto .7rem;display:grid;place-items:center;background:linear-gradient(135deg,#5aa2ff,#1a3aa6);color:#fff;font-weight:800;letter-spacing:.05em}
+.ct{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border:1px solid var(--bd);border-radius:10px;color:var(--tx);text-decoration:none;font-weight:600;text-align:left;margin-top:.5rem}
+.ct:hover{border-color:var(--ac)}
+
+aside .credit{color:var(--st);border-color:rgba(255,255,255,.18);margin-top:.8rem}aside .credit b{color:#fff}
+
 @media(max-width:760px){aside .credit{display:none}}
 @media(max-width:760px){
  #app{grid-template-columns:1fr;grid-template-rows:1fr auto}
@@ -139,18 +174,19 @@ aside .credit{color:var(--st);opacity:.85;margin-top:.7rem}
   </aside>
   <main>
     <section id="p1" class="pane">
-      <h2>Discussion générale</h2>
+      <h2 id="rt">Discussion générale</h2><div class="rbar"><div id="rb" class="rb"></div><input id="sq" class="sq" type="search" placeholder="Rechercher"></div>
       <div id="chat" class="msgs" aria-live="polite"></div>
-      <form class="bar" id="cf"><input id="ci" placeholder="Écrire un message" maxlength="1000" autocomplete="off"><button>Envoyer</button></form>
+      <div id="rp" class="rp hide"></div><form class="bar" id="cf"><input id="ci" placeholder="Écrire un message" maxlength="1000" autocomplete="off"><button>Envoyer</button></form>
     </section>
     <section id="p2" class="pane hide">
       <h2>Publications</h2>
       <div id="wall">
-        <form class="post" id="pf"><textarea id="pi" placeholder="Partager quelque chose avec l’équipe" maxlength="5000"></textarea><div style="margin-top:.5rem;display:flex;gap:.4rem"><button>Publier</button></div></form>
+        <form class="post" id="pf"><textarea id="pi" placeholder="Partager quelque chose avec l’équipe" maxlength="5000"></textarea><textarea id="po" class="hide" placeholder="Options du sondage : une par ligne (2 à 6). Écrivez la question dans la zone ci-dessus." style="margin-top:.5rem;min-height:70px"></textarea><div style="margin-top:.5rem;display:flex;gap:.4rem"><button>Publier</button></div></form>
         <div id="posts" style="display:grid;gap:1rem"></div>
       </div>
     </section>
-    <section id="p4" class="pane hide"><h2>Membres</h2><div style="padding:.75rem 1.25rem"><input id="ms" placeholder="Rechercher un membre"></div><div id="ml" class="mlist"></div></section>
+    <section id="p4" class="pane hide"><h2>Membres</h2><div style="padding:.75rem 1.25rem"><input id="ms" placeholder="Rechercher un membre"></div><div id="bk" class="hide" style="padding:0 1.25rem .75rem;display:flex;gap:.5rem;flex-wrap:wrap"><button id="bk1" class="sm">💾 Sauvegarde complète</button><button id="bk2" class="sm">📊 Liste des membres (Excel)</button></div>
+      <div id="ml" class="mlist"></div></section>
     <section id="p3" class="pane dm hide">
       <div id="peers"><h2>Messages privés</h2><input id="ps" placeholder="Chercher un collègue"><div id="pl"></div></div>
       <div id="conv">
@@ -173,6 +209,21 @@ aside .credit{color:var(--st);opacity:.85;margin-top:.7rem}
   <div style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap">
     <button id="sv">Enregistrer</button><button class="g" id="rm" type="button">Retirer la photo</button><button class="g" id="cl" type="button">Fermer</button><button class="g" id="out" type="button" style="margin-left:auto">Se déconnecter</button>
   </div>
+</dialog>
+<dialog id="rcd"><strong>Nouveau mot de passe</strong><input id="np" type="password" placeholder="Nouveau mot de passe (6 caractères minimum)" style="margin:.7rem 0"><div style="display:flex;gap:.5rem"><button id="npb" type="button">Enregistrer</button><button class="g" id="npc" type="button">Annuler</button></div><div class="who" id="npm" style="margin-top:.5rem"></div></dialog>
+<dialog id="rpd" style="width:min(520px,94vw)"><strong>Signalements</strong><div id="rpl" style="display:grid;gap:.6rem;margin:.8rem 0;max-height:60vh;overflow-y:auto"></div><button class="g" id="rpc" type="button">Fermer</button></dialog>
+<dialog id="ab" style="text-align:center">
+  <div class="rds">RDS</div>
+  <div class="who" style="letter-spacing:.16em;text-transform:uppercase;font-size:.62rem">Conçu et développé par</div>
+  <h3 style="margin:.2rem 0;letter-spacing:.1em;font-size:1.15rem;font-weight:800">RAY DIGITAL SERVICE</h3>
+  <div class="who">Assistance et développement</div>
+  <hr style="border:0;border-top:1px solid var(--bd);margin:1rem 0">
+  <div style="font-weight:700">Joel NDRIAMPARANY</div>
+  <a class="ct" href="mailto:inforayes@gmail.com"><span>✉️</span>inforayes@gmail.com</a>
+  <a class="ct" href="https://wa.me/261345250652" target="_blank" rel="noopener"><span>💬</span>WhatsApp · 034 52 506 52</a>
+  <a class="ct" href="tel:+261345250652"><span>📞</span>Appeler · 034 52 506 52</a>
+  <div class="who" style="margin-top:1rem">Ray Com 2.0 · Version 1.0</div>
+  <button class="g" id="abc" type="button" style="margin-top:.4rem">Fermer</button>
 </dialog>
 <dialog id="md">
   <div style="display:flex;gap:.8rem;align-items:center"><span id="mdav"></span><div><strong id="mdn" style="font-size:1.1rem"></strong><div class="who" id="mdi"></div></div></div>
@@ -255,7 +306,7 @@ $('#f').onsubmit=async e=>{
   }
 };
 $('#out').onclick=()=>{$('#pd').close();sb.auth.signOut()};
-sb.auth.onAuthStateChange((_e,s)=>{
+sb.auth.onAuthStateChange((ev,s)=>{if(ev==='PASSWORD_RECOVERY')setTimeout(()=>$('#rcd').showModal(),0);
   setTimeout(()=>{
     if(s&&s.user){me=s.user;start()}
     else{me=null;started=false;sb.removeAllChannels();$('#app').classList.add('hide');$('#auth').classList.remove('hide')}
@@ -265,11 +316,11 @@ sb.auth.getSession().then(({data})=>{if(!data.session)$('#auth').classList.remov
 
 /* Profils (mis en cache pour économiser la bande passante) */
 async function sync(){
-  try{P=JSON.parse(localStorage.getItem('pv2')||'{}')}catch(e){P={}}
-  let last=localStorage.getItem('pv2t')||'1970-01-01T00:00:00Z';
-  const {data}=await sb.from('profiles').select('id,name,avatar,is_admin,updated_at,about,show_email,created_at').gt('updated_at',last);
-  (data||[]).forEach(p=>{P[p.id]={name:p.name,avatar:p.avatar,admin:p.is_admin,about:p.about,show:p.show_email,since:p.created_at};if(p.updated_at>last)last=p.updated_at});
-  try{localStorage.setItem('pv2',JSON.stringify(P));localStorage.setItem('pv2t',last)}catch(e){}
+  try{P=JSON.parse(localStorage.getItem('pv3')||'{}')}catch(e){P={}}
+  let last=localStorage.getItem('pv3t')||'1970-01-01T00:00:00Z';
+  const {data}=await sb.from('profiles').select('id,name,avatar,is_admin,updated_at,about,show_email,created_at,suspended,family_only').gt('updated_at',last);
+  (data||[]).forEach(p=>{P[p.id]={name:p.name,avatar:p.avatar,admin:p.is_admin,about:p.about,show:p.show_email,since:p.created_at,susp:p.suspended,famonly:p.family_only};if(p.updated_at>last)last=p.updated_at});
+  try{localStorage.setItem('pv3',JSON.stringify(P));localStorage.setItem('pv3t',last)}catch(e){}
 }
 function chip(){const c=$('#chip');c.replaceChildren(av(me.id,30),h('span','',nm(me.id)))}
 
@@ -277,14 +328,15 @@ async function start(){
   if(started)return;started=true;
   $('#auth').classList.add('hide');$('#app').classList.remove('hide');
   await sync();isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
-  await Promise.all([loadChat(),loadPosts(),loadDms(),loadContacts()]);
+  await initApp();
   sb.channel('live')
-   .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{if(!P[p.new.user_id])await sync();addMsg(p.new,true)})
+   .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{if(!P[p.new.user_id])await sync();if(p.new.room_id===room)addMsg(p.new,true);else{unreadRoom[p.new.room_id]=1;drawRooms()}})
    .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const x=document.querySelector('[data-id="'+p.old.id+'"]');if(x)x.remove()})
    .on('postgres_changes',{event:'*',schema:'public',table:'posts'},loadPosts)
    .on('postgres_changes',{event:'*',schema:'public',table:'comments'},loadPosts)
    .on('postgres_changes',{event:'INSERT',schema:'public',table:'dms'},p=>gotDm(p.new))
    .on('postgres_changes',{event:'*',schema:'public',table:'contacts'},loadContacts)
+   .on('postgres_changes',{event:'*',schema:'public',table:'reactions'},rxEvent)
    .subscribe();
 }
 
@@ -317,69 +369,8 @@ addPhoto($('#df'),'d',$('#df button:not(.em)'));
 addPhoto($('#pf div'),'p',$('#pf div button:not(.em)'));
 
 /* Discussion générale */
-function addMsg(m,scroll){
-  const c=$('#chat');
-  if(document.querySelector('[data-id="'+m.id+'"]'))return;
-  const e0=c.querySelector('.empty');if(e0)e0.remove();
-  const mine=m.user_id===me.id,d=h('div','m'+(mine?' me':''));d.dataset.id=m.id;
-  const b=h('div','mb');
-  b.append(whoEl(m.user_id,m.created_at));if(m.content)b.append(h('div','',m.content));{const pi=imgEl(m.image);if(pi)b.append(pi)}
-  if(mine||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('messages').delete().eq('id',m.id).then(()=>d.remove());b.append(x)}
-  d.append(av(m.user_id,34),b);
-  const near=c.scrollHeight-c.scrollTop-c.clientHeight<120;
-  c.append(d);if(scroll&&(near||mine))c.scrollTop=c.scrollHeight;
-}
-async function loadChat(){
-  const {data}=await sb.from('messages').select('*').order('created_at',{ascending:false}).limit(80);
-  const c=$('#chat');c.replaceChildren();
-  (data||[]).reverse().forEach(m=>addMsg(m));
-  if(!data||!data.length)c.append(h('div','empty','Aucun message. Écrivez le premier.'));
-  c.scrollTop=c.scrollHeight;
-}
-$('#cf').onsubmit=async e=>{
-  e.preventDefault();
-  const t=$('#ci').value.trim();if(!t&&!att.c)return;let image=null;try{image=await up('c')}catch(x){return alert('Photo non envoyée : '+x.message)}
-  $('#ci').value='';
-  const {error}=await sb.from('messages').insert({content:t,image});
-  if(error)alert('Message non envoyé : '+error.message);
-};
 
 /* Publications */
-async function loadPosts(){
-  const a=document.activeElement;
-  if(a&&a.closest&&a.closest('#posts')&&a.value)return;
-  const {data}=await sb.from('posts').select('*,comments(*)').order('created_at',{ascending:false}).limit(30);
-  const box=$('#posts');box.replaceChildren();
-  if(!data||!data.length){box.append(h('div','empty','Aucune publication pour le moment.'));return}
-  for(const p of data){
-    const d=h('article','post'),hd=h('div','ph'),w=h('div');
-    w.append(h('strong','',nm(p.user_id)),h('div','who',when(p.created_at)));
-    hd.append(av(p.user_id,40),w);
-    d.append(hd);if(p.content)d.append(h('p','',p.content));{const pi=imgEl(p.image);if(pi)d.append(pi)}
-    if(p.user_id===me.id||isAdmin){
-      const x=h('button','g','Supprimer la publication');
-      x.onclick=()=>confirm('Supprimer cette publication ?')&&sb.from('posts').delete().eq('id',p.id);
-      d.append(x);
-    }
-    (p.comments||[]).sort((a,b)=>a.created_at<b.created_at?-1:1).forEach(c=>{
-      const k=h('div','cm'),b=h('div');
-      b.append(whoEl(c.user_id,c.created_at),h('div','',c.content));
-      if(c.user_id===me.id||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('comments').delete().eq('id',c.id);b.append(x)}
-      k.append(av(c.user_id,26),b);d.append(k);
-    });
-    const f=h('form','cform'),i=h('input');i.placeholder='Écrire un commentaire';i.maxLength=1000;
-    f.append(i,emBtn(i),h('button','','Commenter'));
-    f.onsubmit=async e=>{e.preventDefault();const t=i.value.trim();if(!t)return;i.value='';await sb.from('comments').insert({post_id:p.id,content:t})};
-    d.append(f);box.append(d);
-  }
-}
-$('#pf').onsubmit=async e=>{
-  e.preventDefault();
-  const t=$('#pi').value.trim();if(!t&&!att.p)return;let image=null;try{image=await up('p')}catch(x){return alert('Photo non envoyée : '+x.message)}
-  const {error}=await sb.from('posts').insert({content:t,image});
-  if(error)return alert('Publication non envoyée : '+error.message);
-  $('#pi').value='';
-};
 
 /* Messages privés */
 const other=d=>d.sender===me.id?d.recipient:d.sender;
@@ -436,10 +427,10 @@ async function gotDm(d){
 }
 $('#df').onsubmit=async e=>{
   e.preventDefault();
-  const t=$('#di').value.trim();if((!t&&!att.d)||!peer)return;let image=null;try{image=await up('d')}catch(x){return alert('Photo non envoyée : '+x.message)}
+  const t=$('#di').value.trim();if((!t&&!att.d)||!peer)return;let image=null;try{image=await up('d')}catch(x){return alert('Photo non envoyée : '+em(x))}
   $('#di').value='';
   const {data,error}=await sb.from('dms').insert({recipient:peer,content:t,image}).select().single();
-  if(error)return alert('Message non envoyé : '+error.message);
+  if(error)return alert('Message non envoyé : '+em(error));
   gotDm(data);
 };
 
@@ -464,17 +455,17 @@ function renderMembers(){
   const q=$('#ms').value.trim().toLowerCase(),box=$('#ml');box.replaceChildren();
   Object.keys(P).sort((a,b)=>nm(a).localeCompare(nm(b))).filter(id=>nm(id).toLowerCase().includes(q)).forEach(id=>{
     const b=h('button','mr'),t=h('div'),n=h('div');
-    n.append(nm(id));if(P[id].admin)n.append(h('span','tag','Admin'));if(id===me.id)n.append(h('span','tag','Vous'));
+    n.append(nm(id));if(P[id].admin)n.append(h('span','tag','Admin'));if(id===me.id)n.append(h('span','tag','Vous'));if(P[id].famonly)n.append(h('span','tag','Famille'));
     t.append(n);if(P[id].about)t.append(h('small','',P[id].about));
     b.append(av(id,42),t);b.onclick=()=>openMember(id);box.append(b);
   });
-  $('#p4 h2').textContent='Membres ('+Object.keys(P).length+')';
+  $('#p4 h2').textContent='Membres ('+Object.keys(P).length+')';$('#bk').classList.toggle('hide',!isAdmin);
 }
 $('#ms').oninput=renderMembers;
-function drawActions(id){
+function drawActions0(id){
   const box=$('#mdx');box.replaceChildren();if(id===me.id)return;
   const r0=rel(id);
-  const btn=(t,f,cls)=>{const b=h('button',cls||'',t);b.onclick=async()=>{b.disabled=true;const {error}=await f();if(error)alert(error.message);loadContacts()};box.append(b)};
+  const btn=(t,f,cls)=>{const b=h('button',cls||'',t);b.onclick=async()=>{b.disabled=true;const {error}=await f();if(error)alert(em(error));loadContacts()};box.append(b)};
   if(!r0)btn('Envoyer une demande de contact',()=>sb.from('contacts').insert({addressee:id}));
   else if(r0.status==='accepted'){
     const w=h('button','','Écrire un message');w.onclick=()=>{$('#md').close();tab(3);openPeer(id)};box.append(w);
@@ -488,7 +479,7 @@ async function openMember(id){
   const p=P[id]||{};
   $('#md').dataset.id=id;
   $('#mdav').replaceChildren(av(id,64));$('#mdn').textContent=nm(id);
-  $('#mdi').textContent=(p.admin?'Administrateur':'Membre')+(id===me.id?' · c’est vous':'');
+  $('#mdi').textContent=(p.admin?'Administrateur':'Membre')+(id===me.id?' · c’est vous':'')+(p.susp?' · suspendu':'')+(p.famonly?' · accès famille':'');
   $('#mda').textContent=p.about||'Aucune présentation.';
   $('#mds').textContent=p.since?'Membre depuis le '+new Date(p.since).toLocaleDateString('fr-FR'):'';
   $('#mde').textContent='E-mail : …';
@@ -499,8 +490,313 @@ async function openMember(id){
 $('#mdc').onclick=()=>$('#md').close();
 
 /* Crédits */
-function credit(el){el.innerHTML='<div>Conçu et développé par <b>Joel NDRIAMPARANY</b></div><div><b>RAY DIGITAL SERVICE</b> · Assistance et développement</div><div><a href="mailto:inforayes@gmail.com">inforayes@gmail.com</a> · <a href="https://wa.me/261345250652" target="_blank" rel="noopener">WhatsApp 034 52 506 52</a></div>'}
-[$('#auth'),$('aside'),$('#pd')].forEach(box=>{const x=h('div','credit');credit(x);box.append(x)});
+function credit(el){el.innerHTML='<small>Conçu et développé par</small><b>RAY DIGITAL SERVICE</b><span>Assistance et développement</span>';el.onclick=()=>$('#ab').showModal()}
+$('#abc').onclick=()=>$('#ab').close();
+[$('#auth'),$('aside'),$('#pd')].forEach(box=>{const x=h('button','credit');x.type='button';credit(x);box.append(x)});
+
+/* Sauvegardes (admin) */
+async function allRows(t){let o=[],f=0;for(;;){const {data,error}=await sb.from(t).select('*').order(t==='poll_votes'?'post_id':'id',{ascending:true}).range(f,f+999);if(error)throw error;o=o.concat(data);if(data.length<1000)break;f+=1000}return o}
+function dl(n,t,m){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:m}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+$('#bk1').onclick=async()=>{
+  const b=$('#bk1');b.disabled=true;b.textContent='Export en cours…';
+  try{
+    const T=['profiles','emails','messages','posts','comments','reactions','poll_votes'],R=await Promise.all(T.map(t=>allRows(t))),o={date:new Date().toISOString()};
+    T.forEach((t,i)=>o[t]=R[i]);
+    dl('sauvegarde-ray-com-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(o,null,1),'application/json');
+  }catch(e){alert('Export impossible : '+e.message)}
+  b.disabled=false;b.textContent='💾 Sauvegarde complète';
+};
+$('#bk2').onclick=async()=>{
+  try{
+    const em={};(await allRows('emails')).forEach(e=>em[e.id]=e.email);
+    const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+    const rows=[['Nom','E-mail','Rôle','Présentation','Inscrit le']].concat(Object.keys(P).map(id=>[nm(id),em[id]||'',P[id].admin?'Admin':'Membre',P[id].about||'',P[id].since?new Date(P[id].since).toLocaleDateString('fr-FR'):'']));
+    dl('membres-ray-com.csv','\ufeff'+rows.map(x=>x.map(q).join(';')).join('\r\n'),'text/csv');
+  }catch(e){alert('Export impossible : '+e.message)}
+};
+
+/* ===== Nouveautés : salons, famille, réactions, sondages, modération ===== */
+let rooms=[],room=1,fam=false,replyTo=null,unreadRoom={},RX={},postLimit=30,famIds=new Set(),reps=[];
+function em(e){const m=(e&&e.message)||String(e);return /row-level security|violates/i.test(m)?'Action refusée : compte suspendu ou accès limité.':m}
+const RXE=['👍','❤️','😂','😮','🙏'];
+const firstName=id=>nm(id).trim().split(/\s+/)[0];
+const mentionsMe=t=>!!t&&new RegExp('@'+firstName(me.id).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i').test(t);
+function txtEl(t,tag){const e=h(tag||'div');String(t).split(/(@[\p{L}\d_.-]+)/u).forEach((x,i)=>{if(i%2)e.append(h('span','mt',x));else e.append(x)});return e}
+
+/* Icônes du menu */
+const SV=d=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
+const ICO={
+ t1:SV('<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.6-.8L3 21l1.9-5.1A8.4 8.4 0 0 1 3 11.5 8.5 8.5 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/>'),
+ t2:SV('<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M7 9h10M7 13h10M7 17h5"/>'),
+ t4:SV('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 3-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.4c1.9.8 3 2.7 3 5.6"/>'),
+ t3:SV('<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 8 8 5.5L20 8"/>')};
+document.querySelectorAll('aside nav button').forEach(b=>{const s0=b.querySelector('span');s0.className='ic';s0.innerHTML=ICO[b.id]});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+/* Démarrage selon le type de compte */
+async function initApp(){
+  const m0=P[me.id]||{};fam=!!m0.famonly;
+  if(m0.susp)alert('Votre compte est suspendu par l’administrateur : vous pouvez lire, mais plus écrire.');
+  ['t2','t3','t4'].forEach(i=>$('#'+i).classList.toggle('hide',fam));
+  if(fam)tab(1);
+  await loadRooms();
+  if(fam){await loadChat();return}
+  await Promise.all([loadChat(),loadPosts(),loadDms(),loadContacts()]);
+  if(isAdmin){loadReports();loadFam()}
+}
+async function loadRooms(){
+  const {data}=await sb.from('rooms').select('*').order('id');
+  rooms=data||[];
+  if(!rooms.some(x=>x.id===room))room=rooms.length?rooms[0].id:0;
+  drawRooms();
+}
+function drawRooms(){
+  const b=$('#rb');b.replaceChildren();
+  rooms.forEach(x=>{
+    const c=h('button','rc'+(x.id===room?' on':''),x.emoji+' '+x.name);
+    if(unreadRoom[x.id]&&x.id!==room)c.append(h('i','dot'));
+    c.onclick=()=>{room=x.id;unreadRoom[x.id]=0;$('#sq').value='';replyTo=null;showReply();drawRooms();loadChat()};
+    b.append(c);
+  });
+  if(isAdmin&&!fam){
+    const a=h('button','rc g','+ Salon');
+    a.onclick=async()=>{const n=prompt('Nom du nouveau salon (ex. Direction, Terrain) :');if(!n||!n.trim())return;const {error}=await sb.rpc('admin_create_room',{rname:n.trim(),remoji:'💬'});if(error)alert(em(error));else loadRooms()};
+    b.append(a);
+  }
+  const cur=rooms.find(x=>x.id===room);$('#rt').textContent=cur?cur.emoji+' '+cur.name:'Discussion';
+}
+let st0;$('#sq').oninput=()=>{clearTimeout(st0);st0=setTimeout(()=>loadChat($('#sq').value.trim()),400)};
+
+/* Discussion */
+function addMsg(m,scroll,top){
+  const c=$('#chat');
+  if(document.querySelector('[data-id="'+m.id+'"]'))return;
+  const e0=c.querySelector('.empty');if(e0)e0.remove();
+  const mine=m.user_id===me.id,d=h('div','m'+(mine?' me':''));
+  d.dataset.id=m.id;d.dataset.t=m.created_at;d.dataset.nm=nm(m.user_id);d.dataset.tx=(m.content||'📷 Photo').slice(0,80);
+  const b=h('div','mb'+(mentionsMe(m.content)&&!mine?' mn':''));
+  b.append(whoEl(m.user_id,m.created_at));
+  if(m.reply_to){const q=document.querySelector('[data-id="'+m.reply_to+'"]'),qd=h('div','qt');qd.textContent=q?'↩ '+q.dataset.nm+' : '+q.dataset.tx:'↩ Réponse à un message';b.append(qd)}
+  if(m.content)b.append(txtEl(m.content));
+  {const pi=imgEl(m.image);if(pi)b.append(pi)}
+  b.append(rxBar('message',m.id));
+  const ac=h('div','act');
+  const rp=h('button','g','Répondre');rp.onclick=()=>{replyTo={id:m.id,nm:nm(m.user_id),tx:(m.content||'📷 Photo').slice(0,60)};showReply();$('#ci').focus()};ac.append(rp);
+  if(!mine){const sg=h('button','g','Signaler');sg.onclick=()=>report('message',m.id);ac.append(sg)}
+  if(mine||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('messages').delete().eq('id',m.id).then(()=>d.remove());ac.append(x)}
+  b.append(ac);
+  d.append(av(m.user_id,34),b);
+  const near=c.scrollHeight-c.scrollTop-c.clientHeight<120;
+  if(top)c.insertBefore(d,c.querySelector('.m'));else c.append(d);
+  if(scroll&&(near||mine))c.scrollTop=c.scrollHeight;
+}
+async function loadChat(q){
+  const c=$('#chat');c.replaceChildren();
+  if(!room){c.append(h('div','empty','Aucun salon disponible. Si vous êtes de la famille, l’administrateur doit d’abord vous ajouter au groupe.'));$('#cf').classList.add('hide');return}
+  $('#cf').classList.remove('hide');
+  let qq=sb.from('messages').select('*').eq('room_id',room);
+  if(q)qq=qq.ilike('content','%'+q.replace(/[%_]/g,' ')+'%');
+  const {data}=await qq.order('created_at',{ascending:false}).limit(80);
+  (data||[]).slice().reverse().forEach(m=>addMsg(m));
+  if(!data||!data.length)c.append(h('div','empty',q?'Aucun résultat.':'Aucun message. Écrivez le premier.'));
+  if(data&&data.length===80&&!q){const mb=h('button','g','Voir les messages plus anciens');mb.onclick=()=>older(mb);c.prepend(mb)}
+  loadRx('message',(data||[]).map(m=>m.id));
+  c.scrollTop=c.scrollHeight;
+}
+async function older(btn){
+  const first=$('#chat .m');if(!first)return;
+  const {data}=await sb.from('messages').select('*').eq('room_id',room).lt('created_at',first.dataset.t).order('created_at',{ascending:false}).limit(80);
+  (data||[]).forEach(m=>addMsg(m,false,true));
+  if(!data||data.length<80)btn.remove();
+  loadRx('message',(data||[]).map(m=>m.id));
+}
+function showReply(){const x=$('#rp');if(!replyTo){x.classList.add('hide');return}x.textContent='↩ Réponse à '+replyTo.nm+' : '+replyTo.tx+'   ✕';x.classList.remove('hide')}
+$('#rp').onclick=()=>{replyTo=null;showReply()};
+$('#cf').onsubmit=async e=>{
+  e.preventDefault();
+  const t=$('#ci').value.trim();if(!t&&!att.c)return;
+  let image=null;try{image=await up('c')}catch(x){return alert('Photo non envoyée : '+em(x))}
+  $('#ci').value='';
+  const {error}=await sb.from('messages').insert({content:t,image,room_id:room,reply_to:replyTo?replyTo.id:null});
+  replyTo=null;showReply();
+  if(error)alert('Message non envoyé : '+em(error));
+};
+
+/* Réactions */
+function rxBar(kind,id){const d=h('div','rx');d.dataset.rx=kind+':'+id;drawRx(d);return d}
+function drawRx(d){
+  const key=d.dataset.rx,parts=key.split(':'),kind=parts[0],id=+parts[1],list=RX[key]||[];d.replaceChildren();
+  const g={};list.forEach(x=>{(g[x.emoji]=g[x.emoji]||[]).push(x)});
+  Object.keys(g).forEach(e=>{
+    const mine=g[e].some(x=>x.user_id===me.id),b=h('button','rb2'+(mine?' on':''),e+' '+g[e].length);
+    b.title=g[e].map(x=>nm(x.user_id)).join(', ');b.onclick=()=>toggleRx(kind,id,e);d.append(b);
+  });
+  const p=h('button','rb2','☺＋');
+  p.onclick=()=>{p.remove();RXE.forEach(e=>{const x=h('button','rb2',e);x.onclick=()=>toggleRx(kind,id,e);d.append(x)})};
+  d.append(p);
+}
+function paintRx(key){document.querySelectorAll('[data-rx="'+key+'"]').forEach(drawRx)}
+async function loadRx(kind,ids){
+  for(let i=0;i<ids.length;i+=100){
+    const part=ids.slice(i,i+100);
+    const {data}=await sb.from('reactions').select('*').eq('kind',kind).in('target_id',part);
+    part.forEach(id=>RX[kind+':'+id]=[]);
+    (data||[]).forEach(x=>RX[kind+':'+x.target_id].push(x));
+    part.forEach(id=>paintRx(kind+':'+id));
+  }
+}
+async function toggleRx(kind,id,emoji){
+  const key=kind+':'+id,mine=(RX[key]||[]).find(x=>x.user_id===me.id&&x.emoji===emoji);
+  if(mine){const {error}=await sb.from('reactions').delete().eq('id',mine.id);if(error)return alert(em(error));RX[key]=RX[key].filter(x=>x.id!==mine.id)}
+  else{const {data,error}=await sb.from('reactions').insert({kind,target_id:id,emoji}).select().single();if(error)return alert(em(error));(RX[key]=RX[key]||[]).push(data)}
+  paintRx(key);
+}
+function rxEvent(p){
+  if(p.eventType==='INSERT'){const x=p.new,key=x.kind+':'+x.target_id;RX[key]=RX[key]||[];if(!RX[key].some(y=>y.id===x.id)){RX[key].push(x);paintRx(key)}}
+  else if(p.eventType==='DELETE'){for(const key in RX){const n=RX[key].filter(y=>y.id!==p.old.id);if(n.length!==RX[key].length){RX[key]=n;paintRx(key)}}}
+}
+
+/* Publications */
+function pollEl(p,vs){
+  const d=h('div','poll'),tot=vs.length,mine=vs.find(v=>v.user_id===me.id);
+  p.poll.forEach((o,i)=>{
+    const n=vs.filter(v=>v.opt===i).length,pc=tot?Math.round(n*100/tot):0,b=h('button','po'+(mine&&mine.opt===i?' on':''));
+    const bar=h('i','pb');bar.style.width=pc+'%';
+    b.append(bar,h('span','',o),h('em','',n+' · '+pc+'%'));
+    b.onclick=async()=>{const {error}=await sb.from('poll_votes').upsert({post_id:p.id,opt:i},{onConflict:'post_id,user_id'});if(error)alert(em(error));else loadPosts()};
+    d.append(b);
+  });
+  d.append(h('div','who',tot+' vote'+(tot>1?'s':'')));
+  return d;
+}
+async function loadPosts(){
+  const a=document.activeElement;
+  if(a&&a.closest&&a.closest('#posts')&&a.value)return;
+  const {data}=await sb.from('posts').select('*,comments(*)').order('pinned',{ascending:false}).order('created_at',{ascending:false}).limit(postLimit);
+  const box=$('#posts');box.replaceChildren();
+  if(!data||!data.length){box.append(h('div','empty','Aucune publication pour le moment.'));return}
+  const votes={},pv=data.filter(p=>p.poll).map(p=>p.id);
+  if(pv.length){const {data:v}=await sb.from('poll_votes').select('post_id,user_id,opt').in('post_id',pv);(v||[]).forEach(x=>(votes[x.post_id]=votes[x.post_id]||[]).push(x))}
+  for(const p of data){
+    const d=h('article','post'+(p.pinned?' pin':'')),hd=h('div','ph'),w=h('div');
+    w.append(h('strong','',nm(p.user_id)),h('div','who',when(p.created_at)));
+    hd.append(av(p.user_id,40),w);if(p.pinned)hd.append(h('span','tag','📌 Annonce'));
+    d.append(hd);
+    if(p.content)d.append(txtEl(p.content,'p'));
+    {const pi=imgEl(p.image);if(pi)d.append(pi)}
+    if(p.poll)d.append(pollEl(p,votes[p.id]||[]));
+    d.append(rxBar('post',p.id));
+    const ac=h('div','act');
+    if(isAdmin){const x=h('button','g',p.pinned?'Désépingler':'Épingler');x.onclick=async()=>{const {error}=await sb.rpc('admin_pin',{pid:p.id,flag:!p.pinned});if(error)alert(em(error));else loadPosts()};ac.append(x)}
+    if(p.user_id!==me.id){const sg=h('button','g','Signaler');sg.onclick=()=>report('post',p.id);ac.append(sg)}
+    if(p.user_id===me.id||isAdmin){const x=h('button','g','Supprimer la publication');x.onclick=()=>confirm('Supprimer cette publication ?')&&sb.from('posts').delete().eq('id',p.id);ac.append(x)}
+    d.append(ac);
+    (p.comments||[]).sort((x,y)=>x.created_at<y.created_at?-1:1).forEach(c=>{
+      const k=h('div','cm'),b=h('div'),ca=h('div','act');
+      b.append(whoEl(c.user_id,c.created_at),txtEl(c.content));
+      if(c.user_id!==me.id){const sg=h('button','g','Signaler');sg.onclick=()=>report('comment',c.id);ca.append(sg)}
+      if(c.user_id===me.id||isAdmin){const x=h('button','g','Supprimer');x.onclick=()=>sb.from('comments').delete().eq('id',c.id);ca.append(x)}
+      b.append(ca);k.append(av(c.user_id,26),b);d.append(k);
+    });
+    const f=h('form','cform'),i=h('input');i.placeholder='Écrire un commentaire';i.maxLength=1000;
+    f.append(i,emBtn(i),h('button','','Commenter'));
+    f.onsubmit=async e=>{e.preventDefault();const t=i.value.trim();if(!t)return;i.value='';const {error}=await sb.from('comments').insert({post_id:p.id,content:t});if(error)alert(em(error))};
+    d.append(f);box.append(d);
+  }
+  if(data.length>=postLimit){const m=h('button','g','Voir plus de publications');m.onclick=()=>{postLimit+=30;loadPosts()};box.append(m)}
+  loadRx('post',data.map(p=>p.id));
+}
+{const pb=h('button','em','📊');pb.type='button';pb.title='Créer un sondage';pb.onclick=()=>$('#po').classList.toggle('hide');$('#pf div').insertBefore(pb,$('#pf div button:not(.em)'))}
+$('#pf').onsubmit=async e=>{
+  e.preventDefault();
+  const t=$('#pi').value.trim(),opts=$('#po').classList.contains('hide')?[]:$('#po').value.split('\n').map(x=>x.trim()).filter(Boolean).slice(0,6);
+  if(opts.length===1)return alert('Un sondage demande au moins 2 options (une par ligne).');
+  if(!t&&!att.p)return;
+  let image=null;try{image=await up('p')}catch(x){return alert('Photo non envoyée : '+em(x))}
+  const {error}=await sb.from('posts').insert({content:t,image,poll:opts.length?opts:null});
+  if(error)return alert('Publication non envoyée : '+em(error));
+  $('#pi').value='';$('#po').value='';$('#po').classList.add('hide');
+};
+
+/* Modération */
+async function report(kind,id){
+  if(!confirm('Signaler ce contenu à l’administrateur ?'))return;
+  const {error}=await sb.from('reports').insert({kind,target_id:id});
+  alert(error?em(error):'Merci, le signalement a été envoyé à l’administrateur.');
+}
+async function loadReports(){
+  const {data}=await sb.from('reports').select('*').eq('handled',false).order('created_at');
+  reps=data||[];const b=$('#bkr');
+  if(b)b.textContent='🚩 Signalements ('+new Set(reps.map(x=>x.kind+x.target_id)).size+')';
+}
+async function openReports(){
+  await loadReports();
+  const box=$('#rpl'),T={message:'messages',post:'posts',comment:'comments'},L={message:'Message',post:'Publication',comment:'Commentaire'},done=new Set();
+  box.replaceChildren();
+  for(const x of reps){
+    const k=x.kind+x.target_id;if(done.has(k))continue;done.add(k);
+    const {data}=await sb.from(T[x.kind]).select('*').eq('id',x.target_id).maybeSingle();
+    const d=h('div','post');
+    d.append(h('div','who',L[x.kind]+(data?' de '+nm(data.user_id):' (déjà supprimé)')),h('p','',data?(data.content||'📷 Photo'):'—'));
+    const a=h('button','sm','Supprimer le contenu'),n=h('button','g sm','Ignorer');
+    a.onclick=async()=>{await sb.rpc('admin_handle_report',{rid:x.id,del:true});openReports()};
+    n.onclick=async()=>{await sb.rpc('admin_handle_report',{rid:x.id,del:false});openReports()};
+    d.append(a,n);box.append(d);
+  }
+  if(!box.children.length)box.append(h('div','empty','Aucun signalement en attente.'));
+  if(!$('#rpd').open)$('#rpd').showModal();
+}
+$('#rpc').onclick=()=>$('#rpd').close();
+const famRoom=()=>{const x=rooms.find(y=>y.kind==='family');return x&&x.id};
+async function loadFam(){const f=famRoom();if(!f)return;const {data}=await sb.from('room_members').select('user_id').eq('room_id',f);famIds=new Set((data||[]).map(x=>x.user_id))}
+function drawActions(id){
+  drawActions0(id);
+  if(!isAdmin||id===me.id)return;
+  const box=$('#mdx'),btn=(t,f)=>{const b=h('button','g',t);b.onclick=async()=>{b.disabled=true;const {error}=await f();if(error)alert(em(error));await sync();drawActions(id)};box.append(b)};
+  const sp=P[id]&&P[id].susp;
+  btn(sp?'Réactiver ce membre':'Suspendre ce membre',()=>sb.rpc('admin_suspend',{uid:id,flag:!sp}));
+  if(famRoom())btn(famIds.has(id)?'Retirer du groupe famille':'Ajouter au groupe famille',async()=>{const x=await sb.rpc('admin_family',{uid:id,flag:!famIds.has(id)});await loadFam();return x});
+}
+{
+  const b3=h('button','sm','♻️ Restaurer une sauvegarde'),f=h('input'),br=h('button','sm','🚩 Signalements');
+  f.type='file';f.accept='.json';f.className='hide';br.id='bkr';br.onclick=openReports;b3.onclick=()=>f.click();
+  f.onchange=async()=>{
+    const x=f.files[0];f.value='';if(!x)return;
+    try{
+      const o=JSON.parse(await x.text());
+      if(!o.messages&&!o.posts)throw new Error('Fichier de sauvegarde non reconnu.');
+      if(!confirm('Restaurer cette sauvegarde ? Les contenus déjà présents ne seront pas dupliqués.'))return;
+      const pay={};['profiles','emails','messages','posts','comments','reactions','poll_votes'].forEach(k=>pay[k]=o[k]||[]);
+      const {data,error}=await sb.rpc('restore_backup',{data:pay});
+      if(error)throw error;
+      alert('Restauration terminée.\n'+data);loadChat();loadPosts();
+    }catch(e){alert('Restauration impossible : '+em(e))}
+  };
+  $('#bk').append(b3,f,br);
+}
+
+/* Mot de passe */
+{
+  const fg=h('button','g','Mot de passe oublié ?');fg.type='button';$('#swap').after(fg);
+  $('#code').placeholder='Code d’accès (équipe ou famille)';
+  fg.onclick=async()=>{
+    const email=$('#email').value.trim();
+    if(!email)return say('Saisissez d’abord votre e-mail ci-dessus.');
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+    say(error?em(error):'Si ce compte existe, un e-mail de réinitialisation vient d’être envoyé.',!error);
+  };
+  const cp=h('button','g','Changer mon mot de passe');cp.type='button';
+  cp.onclick=()=>{$('#pd').close();$('#rcd').showModal()};
+  $('#pse').parentElement.after(cp);
+}
+$('#npc').onclick=()=>$('#rcd').close();
+$('#npb').onclick=async()=>{
+  const pw=$('#np').value;
+  if(pw.length<6)return $('#npm').textContent='6 caractères minimum.';
+  const {error}=await sb.auth.updateUser({password:pw});
+  $('#npm').textContent=error?em(error):'Mot de passe modifié.';
+  if(!error){$('#np').value='';setTimeout(()=>$('#rcd').close(),1200)}
+};
 
 /* Profil */
 let draft='';
@@ -524,9 +820,9 @@ $('#pf0').onchange=e=>{
 $('#sv').onclick=async()=>{
   const name=$('#pn').value.trim()||nm(me.id),about=$('#pa').value.trim()||null,show=$('#pse').checked;
   const {error}=await sb.from('profiles').update({name,avatar:draft||null,about,show_email:show}).eq('id',me.id);
-  if(error)return alert('Profil non enregistré : '+error.message);
-  P[me.id]={name,avatar:draft||null,admin:isAdmin,about,show,since:P[me.id]&&P[me.id].since};
-  try{localStorage.setItem('pv2',JSON.stringify(P))}catch(e){}
+  if(error)return alert('Profil non enregistré : '+em(error));
+  P[me.id]={name,avatar:draft||null,admin:isAdmin,about,show,since:P[me.id]&&P[me.id].since,susp:P[me.id].susp,famonly:P[me.id].famonly};
+  try{localStorage.setItem('pv3',JSON.stringify(P))}catch(e){}
   chip();$('#pd').close();loadChat();loadPosts();renderPeers();
 };
 </script>
