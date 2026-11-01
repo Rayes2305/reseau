@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnostic Ray Com</title>
+<style>
+body{font:16px/1.5 system-ui,sans-serif;margin:0;padding:16px;background:#f4f6fb;color:#142033}
+h1{font-size:1.25rem;margin:0 0 .3rem}
+p{margin:.3rem 0 .8rem;color:#475569}
+.r{padding:6px 0;border-bottom:1px solid #dde3ea;word-break:break-word}
+.ok{color:#047857;font-weight:700}
+.ko{color:#b91c1c;font-weight:700}
+button{padding:12px 14px;font-size:16px;border:0;border-radius:8px;background:#1d4ed8;color:#fff;margin:8px 8px 0 0}
+button.s{background:#64748b}
+#ua{white-space:pre-wrap;background:#fff;padding:10px;border-radius:8px;font-size:13px;margin-top:12px}
+</style>
+</head>
+<body>
+<h1>Diagnostic Ray Com 2.0</h1>
+<p>Attendez environ 15 secondes que tous les tests se terminent, puis envoyez une capture d’écran de toute la page (faites défiler pour tout voir).</p>
+<div id="out"></div>
+<div>
+  <button id="b1">Test du toucher : 0</button>
+  <button id="b2" class="s">Test fenêtre</button>
+  <button id="b3" class="s">Nettoyer les anciennes données</button>
+</div>
+<div id="ua"></div>
+<script>
+var out=document.getElementById('out');
+function line(ok,label,detail){
+  var d=document.createElement('div');d.className='r';
+  d.innerHTML=(ok===null?'':'<span class="'+(ok?'ok':'ko')+'">'+(ok?'✔ ':'✘ ')+'</span>')+label+(detail?' <small>— '+detail+'</small>':'');
+  out.appendChild(d);
+}
+function test(label,fn){
+  try{var v=fn();line(!!v,label,typeof v==='string'?v:'')}
+  catch(e){line(false,label,String(e&&e.message||e))}
+}
+function syntax(label,code){
+  try{var f=new Function(code);f();line(true,label)}
+  catch(e){line(false,label,'non supporté')}
+}
+var ua=navigator.userAgent,m=/Chrome\/(\d+)/.exec(ua);
+document.getElementById('ua').textContent='Navigateur : '+ua+'\nÉcran : '+screen.width+'x'+screen.height+'\nVersion de Chrome : '+(m?m[1]:'inconnue');
+line(null,'<b>Version de Chrome : '+(m?m[1]:'inconnue')+'</b> (Android '+((/Android ([\d.]+)/.exec(ua)||[])[1]||'?')+')');
+
+/* Syntaxe utilisée par le site */
+syntax('Chaînage optionnel ?.','return ({a:1})?.a===1');
+syntax('Opérateur ??','return (null??1)===1');
+syntax('Fonctions async','return (async function(){return 1})()');
+syntax('Expressions \\p{L} (accents)','return /\\p{L}/u.test("é")');
+syntax('Spread d’objet {...}','return ({...{a:1}}).a===1');
+
+/* Fonctions du navigateur utilisées par le site */
+test('replaceChildren',function(){return typeof Element.prototype.replaceChildren==='function'});
+test('Fenêtres <dialog> (showModal)',function(){return typeof HTMLDialogElement!=='undefined'&&typeof HTMLDialogElement.prototype.showModal==='function'});
+test('Element.after()',function(){return typeof Element.prototype.after==='function'});
+test('Stockage local',function(){localStorage.setItem('t','1');var r=localStorage.getItem('t')==='1';localStorage.removeItem('t');return r});
+test('Service worker',function(){return 'serviceWorker' in navigator});
+test('BroadcastChannel',function(){return typeof BroadcastChannel!=='undefined'});
+test('fetch',function(){return typeof fetch==='function'});
+test('WebSocket',function(){return typeof WebSocket!=='undefined'});
+test('crypto.randomUUID (photos)',function(){return typeof crypto!=='undefined'&&typeof crypto.randomUUID==='function'});
+test('Dégradé sur texte (background-clip:text)',function(){return CSS.supports('-webkit-background-clip','text')});
+test('Mode installé (standalone)',function(){return (window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)?'oui, l’application installée':'non, navigateur normal'});
+
+/* Chargement de la bibliothèque de connexion */
+var sources=[
+  ['Copie locale (supabase.js)','supabase.js'],
+  ['jsDelivr','https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js'],
+  ['unpkg','https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.js']
+];
+function loadNext(i){
+  if(i>=sources.length){return netTest()}
+  var t0=new Date().getTime(),done=false,s=document.createElement('script');
+  window.supabase=undefined;
+  function end(ok,msg){if(done)return;done=true;line(ok,'Bibliothèque : '+sources[i][0],msg+' ('+(new Date().getTime()-t0)+' ms)');loadNext(i+1)}
+  s.onload=function(){
+    try{var c=window.supabase.createClient('https://x.supabase.co','k');end(!!c,'chargée et utilisable')}
+    catch(e){end(false,'chargée mais erreur : '+(e&&e.message))}
+  };
+  s.onerror=function(){end(false,'échec du chargement')};
+  setTimeout(function(){end(false,'trop lent (plus de 10 s)')},10000);
+  s.src=sources[i][1]+(sources[i][1].indexOf('?')<0?'?d='+t0:'');
+  document.head.appendChild(s);
+}
+function netTest(){
+  var t0=new Date().getTime();
+  if(typeof fetch!=='function'){return line(false,'Réseau vers la base','fetch indisponible')}
+  fetch('https://odghpbzjaruupkbligmh.supabase.co/rest/v1/rooms?select=id&limit=1',{headers:{apikey:'sb_publishable_r-9HVWtfJJyrcPj4NoCrnw_sxbpvNLa'}})
+    .then(function(r){line(r.status===200,'Réseau vers la base Supabase','réponse HTTP '+r.status+' ('+(new Date().getTime()-t0)+' ms)')})
+    .catch(function(e){line(false,'Réseau vers la base Supabase',String(e&&e.message||e))});
+}
+loadNext(0);
+
+/* Boutons */
+var n=0;
+document.getElementById('b1').onclick=function(){n++;this.textContent='Test du toucher : '+n};
+document.getElementById('b2').onclick=function(){
+  try{
+    var d=document.createElement('dialog');d.textContent='Fenêtre de test OK. Touchez ailleurs pour fermer.';document.body.appendChild(d);
+    d.showModal();setTimeout(function(){d.close();d.remove();line(true,'Test fenêtre','ouverte et fermée')},1200);
+  }catch(e){line(false,'Test fenêtre',String(e&&e.message||e))}
+};
+document.getElementById('b3').onclick=function(){
+  try{if(navigator.serviceWorker)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})})}catch(e){}
+  try{if(window.caches)caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k)})})}catch(e){}
+  try{localStorage.clear();sessionStorage.clear()}catch(e){}
+  line(true,'Nettoyage effectué','désinstallez puis réinstallez l’application');
+};
+</script>
+</body>
+</html>
