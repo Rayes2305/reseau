@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,interactive-widget=resizes-content">
 <title>Ray Com 2.0</title>
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#0b2a6f"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ray Com">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -149,6 +149,27 @@ aside .credit{color:var(--st);border-color:rgba(255,255,255,.18);margin-top:.8re
  .dm{grid-template-columns:1fr}
  .dm #conv{display:none}.dm.open #conv{display:flex}.dm.open #peers{display:none}
  #back{display:inline-block;padding:.2rem .6rem}
+}
+html{-webkit-text-size-adjust:100%}
+body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+@supports(height:100dvh){#app{height:100dvh}}
+dialog{max-height:92dvh;overflow-y:auto}
+#auth{padding-top:calc(10vh + env(safe-area-inset-top))}
+.sq{transition:width .2s}.sq:focus{width:190px}
+.msgs,#wall,.mlist,#pl{overscroll-behavior-y:contain}
+#off{position:fixed;top:0;left:0;right:0;z-index:20;background:#b45309;color:#fff;text-align:center;font-size:.8rem;padding:.25rem}
+.inst{display:block;margin:.8rem auto 0}
+@media(max-width:760px){
+ input,textarea{font-size:16px}
+ .mtop{padding-top:calc(.45rem + env(safe-area-inset-top))}
+ aside{padding-bottom:calc(.3rem + env(safe-area-inset-bottom));padding-left:calc(.3rem + env(safe-area-inset-left));padding-right:calc(.3rem + env(safe-area-inset-right))}
+ .g{padding:.4rem .6rem;font-size:.85rem}
+ .rb2{padding:.2rem .7rem}
+ h2,.rbar,.bar,.msgs{padding-left:.9rem;padding-right:.9rem}
+ #wall{padding:.9rem}
+ .post{padding:.85rem}
+ .sq{width:92px}
 }
 </style>
 </head>
@@ -313,7 +334,8 @@ $('#f').onsubmit=async e=>{
     if(error)say('E-mail ou mot de passe incorrect.');
   }
 };
-$('#out').onclick=()=>{$('#pd').close();sb.auth.signOut()};
+$('#out').onclick=()=>{manualOut=true;$('#pd').close();sb.auth.signOut({scope:'local'})};
+let manualOut=false;
 function resetState(){
   P={};dms=[];ct=[];peer=null;rooms=[];room=1;RX={};famIds=new Set();replyTo=null;unreadRoom={};postLimit=30;reps=[];
   try{localStorage.removeItem('pv3');localStorage.removeItem('pv3t')}catch(e){}
@@ -330,7 +352,7 @@ sb.auth.onAuthStateChange((ev,s)=>{
       me=s.user;start();
     }else if(ev==='SIGNED_OUT'||ev==='INITIAL_SESSION'){
       const {data}=await sb.auth.getSession();
-      if(data&&data.session)return;
+      if(data&&data.session)return;const was=started&&!manualOut;manualOut=false;if(was)setTimeout(()=>say('Votre session a été fermée (déconnexion depuis un autre onglet ou appareil). Reconnectez-vous.'),50);
       me=null;started=false;sb.removeAllChannels();resetState();
       $('#app').classList.add('hide');$('#auth').classList.remove('hide');
     }
@@ -360,12 +382,12 @@ function chip(){const c=$('#chip');c.replaceChildren(av(me.id,30),h('span','',nm
 
 async function start(){
   if(started)return;started=true;
-  try{await start0()}catch(e){console.error(e);alert('Erreur au démarrage : '+em(e)+'\nRechargez la page avec Ctrl + F5.')}
+  try{await start0()}catch(e){console.error(e);started=false;if(me)alert('Erreur au démarrage : '+em(e)+'\nRechargez la page avec Ctrl + F5.')}
 }
 async function start0(){
   $('#auth').classList.add('hide');$('#app').classList.remove('hide');
-  tab(1);await sync();isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
-  await initApp();
+  tab(1);await sync();if(!me)return;isAdmin=!!(P[me.id]&&P[me.id].admin);chip();
+  await initApp();if(!me)return;
   sb.channel('live'+Date.now())
    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},async p=>{if(!P[p.new.user_id])await sync();if(p.new.room_id===room)addMsg(p.new,true);else{unreadRoom[p.new.room_id]=1;drawRooms()}})
    .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages'},p=>{const x=document.querySelector('[data-id="'+p.old.id+'"]');if(x)x.remove()})
@@ -834,6 +856,25 @@ $('#npb').onclick=async()=>{
   $('#npm').textContent=error?em(error):'Mot de passe modifié.';
   if(!error){$('#np').value='';setTimeout(()=>$('#rcd').close(),1200)}
 };
+
+/* Mobile : installation et hors connexion */
+let ipr=null;
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIos=/iphone|ipad|ipod/i.test(navigator.userAgent);
+function showInstall(){document.querySelectorAll('.inst').forEach(b=>b.classList.toggle('hide',standalone()||(!ipr&&!isIos)))}
+function mkInst(box){
+  const b=h('button','g inst hide','📲 Installer l’application');b.type='button';
+  b.onclick=async()=>{
+    if(ipr){ipr.prompt();await ipr.userChoice;ipr=null;showInstall()}
+    else alert('Sur iPhone : touchez le bouton Partager (le carré avec une flèche), puis « Sur l’écran d’accueil ».');
+  };
+  const c=box.querySelector('.credit');if(c)box.insertBefore(b,c);else box.append(b);
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();ipr=e;showInstall()});
+window.addEventListener('appinstalled',()=>{ipr=null;showInstall()});
+mkInst($('#auth'));mkInst($('#pd'));showInstall();
+{const o=h('div','hide','Hors connexion : vérifiez votre réseau.');o.id='off';document.body.append(o);
+ const upd=()=>o.classList.toggle('hide',navigator.onLine);addEventListener('online',upd);addEventListener('offline',upd);upd()}
 
 /* Profil */
 let draft='';
