@@ -202,6 +202,52 @@ button:active{filter:brightness(.94)}
  .kb #pi{min-height:120px}
  #wall{gap:.7rem}
 }
+@media(max-width:760px),(pointer:coarse){
+ .kb .pane>h2,.kb #peers>h2{display:none}
+ body.kb:not(.kbs) .rbar{display:none}
+ .kb #wall{padding:.5rem;gap:.5rem}
+ .kb #pf{padding:.6rem}
+ .kb #pi{min-height:120px}
+}
+@media(max-width:760px),(pointer:coarse){
+ .kb .m .act,.kb .rx{display:none}
+ body.kbp #p2 #posts{display:none!important}
+ body.kbp #p2 #wall{display:flex;flex-direction:column;overflow:hidden}
+ body.kbp #p2 #pf{flex:1;display:flex;flex-direction:column;min-height:0}
+ body.kbp #p2 #pi{flex:1;min-height:0;resize:none}
+ body.kbp #p2 #po{flex:none;min-height:70px}
+}
+@media(max-width:760px){.mtop{grid-row:1}#app>main{grid-row:2}#app>aside{grid-row:3}}
+html body .credit{border:0;border-radius:14px;padding:.8rem .9rem;margin-top:1rem;background:linear-gradient(135deg,#1d4ed8,#6d4cff 60%,#d946ef);color:#fff;box-shadow:0 6px 18px rgba(59,91,219,.35)}
+html body .credit small{color:#dbe7ff;opacity:1}
+html body .credit b{color:#fff;font-size:1.05rem;letter-spacing:.12em;margin:.3rem 0}
+html body .credit span{color:#eaf0ff;font-size:.78rem}
+html body .credit::after{content:'Voir les contacts \203A';display:block;width:max-content;margin:.55rem auto 0;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.2);border-radius:99px;padding:.2rem .75rem}
+html body .credit:hover{filter:brightness(1.08)}
+.pdx,#pd{padding:0;overflow:auto}
+.pdh{display:flex;align-items:center;gap:1rem;padding:1.3rem 1.25rem 1.1rem;background:linear-gradient(135deg,#0b2a6f,#2457d6 45%,#8b5cf6 80%,#ec4899);color:#fff}
+.pdh #prev .av{border:3px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.pdt strong{display:block;font-size:1.25rem;font-weight:800}
+.pdt span{font-size:.8rem;opacity:.9}
+.pdc{padding:1rem 1.25rem .6rem}
+.pds{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:.8rem;margin-bottom:.7rem;display:grid;gap:.5rem}
+.pds h4{margin:0;font-size:.9rem;font-weight:800}
+.pds:nth-child(1){border-left:4px solid #3b82f6}.pds:nth-child(1) h4{color:#3b82f6}
+.pds:nth-child(2){border-left:4px solid #8b5cf6}.pds:nth-child(2) h4{color:#8b5cf6}
+.pds:nth-child(3){border-left:4px solid #ec4899}.pds:nth-child(3) h4{color:#ec4899}
+.pck{display:flex;gap:.5rem;align-items:center}
+.pck input{width:auto}
+.pda{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.3rem 0 .6rem}
+#pd #sv{flex:1;background:linear-gradient(135deg,#3b82f6,#7c5cff);padding:.7rem 1rem}
+#pd #out{color:#dc2626;background:rgba(220,38,38,.1);font-weight:700}
+#pd .credit{margin:.2rem 1.25rem 1.25rem;width:calc(100% - 2.5rem)}
+#pd .inst{margin:.2rem auto .4rem}
+.rmr{display:flex;gap:.4rem;align-items:center}
+.rmr input:first-child{width:54px;text-align:center;flex:none}
+.rmr input{min-width:0}
+.rmn{display:flex;gap:.4rem;margin-top:.9rem}
+.rmn input:first-child{width:54px;text-align:center;flex:none}
+button.dng{background:#ef4444}
 </style>
 </head>
 <body>
@@ -259,16 +305,36 @@ button:active{filter:brightness(.94)}
 </div>
 
 <dialog id="pd">
-  <div style="display:flex;align-items:center;gap:.8rem"><span id="prev"></span><div><strong>Mon profil</strong><div class="who">Photo ou emoji, au choix</div></div></div>
-  <input type="file" id="pf0" accept="image/*" style="margin-top:.8rem">
-  <div class="er" id="er"></div>
-  <input id="pn" placeholder="Votre nom" maxlength="40">
-  <input id="pa" placeholder="Poste ou courte présentation" maxlength="120" style="margin-top:.5rem">
-  <div class="who" style="margin-top:.6rem">Votre e-mail : <b id="pe"></b></div>
-  <label class="who" style="display:flex;gap:.5rem;align-items:center;margin-top:.3rem"><input type="checkbox" id="pse" style="width:auto"> Montrer mon e-mail à mes collègues</label>
-  <div style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap">
-    <button id="sv">Enregistrer</button><button class="g" id="rm" type="button">Retirer la photo</button><button class="g" id="cl" type="button">Fermer</button><button class="g" id="out" type="button" style="margin-left:auto">Se déconnecter</button>
+  <div class="pdh">
+    <span id="prev"></span>
+    <div class="pdt"><strong>Mon profil</strong><span>Personnalisez votre compte</span></div>
   </div>
+  <div class="pdc">
+    <div class="pds"><h4>📸 Photo de profil</h4>
+      <input type="file" id="pf0" accept="image/*">
+      <div class="er" id="er"></div>
+      <button class="g" id="rm" type="button">Retirer la photo</button>
+    </div>
+    <div class="pds"><h4>✏️ Mes informations</h4>
+      <input id="pn" placeholder="Votre nom" maxlength="40">
+      <input id="pa" placeholder="Poste ou courte présentation" maxlength="120">
+      <div class="who">Votre e-mail : <b id="pe"></b></div>
+      <label class="who pck"><input type="checkbox" id="pse"> Montrer mon e-mail à mes collègues</label>
+    </div>
+    <div class="pds" id="pdp"><h4>⚙️ Préférences et sécurité</h4></div>
+    <div class="pda">
+      <button id="sv">Enregistrer</button>
+      <button class="g" id="cl" type="button">Fermer</button>
+      <button class="g" id="out" type="button">Se déconnecter</button>
+    </div>
+  </div>
+</dialog>
+<dialog id="rmd" style="width:min(460px,94vw)">
+  <strong style="font-size:1.1rem">⚙️ Gérer les salons</strong>
+  <div class="who" style="margin:.2rem 0 .8rem">Le salon Général et le groupe Famille ne peuvent pas être supprimés. Supprimer un salon efface aussi ses messages.</div>
+  <div id="rml" style="display:grid;gap:.5rem"></div>
+  <div class="rmn"><input id="rne" maxlength="4" placeholder="💬"><input id="rnn" maxlength="40" placeholder="Nom du nouveau salon"><button id="rna" type="button">Ajouter</button></div>
+  <button class="g" id="rmc" type="button" style="margin-top:.7rem">Fermer</button>
 </dialog>
 <dialog id="rcd"><strong>Nouveau mot de passe</strong><input id="np" type="password" placeholder="Nouveau mot de passe (6 caractères minimum)" style="margin:.7rem 0"><div style="display:flex;gap:.5rem"><button id="npb" type="button">Enregistrer</button><button class="g" id="npc" type="button">Annuler</button></div><div class="who" id="npm" style="margin-top:.5rem"></div></dialog>
 <dialog id="rpd" style="width:min(520px,94vw)"><strong>Signalements</strong><div id="rpl" style="display:grid;gap:.6rem;margin:.8rem 0;max-height:60vh;overflow-y:auto"></div><button class="g" id="rpc" type="button">Fermer</button></dialog>
@@ -283,7 +349,7 @@ button:active{filter:brightness(.94)}
   <a class="ct" href="mailto:inforayes@gmail.com"><i>✉️</i><span>inforayes@gmail.com</span></a>
   <a class="ct" href="https://wa.me/261345250652" target="_blank" rel="noopener"><i>💬</i><span>WhatsApp · 034 52 506 52</span></a>
   <a class="ct" href="tel:+261345250652"><i>📞</i><span>Appeler · 034 52 506 52</span></a>
-  <div class="who abv">Ray Com 2.0 · Version 1.0</div>
+  <div class="who abv">Ray Com 2.0 · Version 1.5</div>
   <button id="abc" type="button">Fermer</button>
 </dialog>
 <dialog id="md">
@@ -652,11 +718,7 @@ function drawRooms(){
     c.onclick=()=>{room=x.id;unreadRoom[x.id]=0;$('#sq').value='';replyTo=null;showReply();drawRooms();loadChat()};
     b.append(c);
   });
-  if(isAdmin&&!fam){
-    const a=h('button','rc g','+ Salon');
-    a.onclick=async()=>{const n=prompt('Nom du nouveau salon (ex. Direction, Terrain) :');if(!n||!n.trim())return;const {error}=await sb.rpc('admin_create_room',{rname:n.trim(),remoji:'💬'});if(error)alert(em(error));else loadRooms()};
-    b.append(a);
-  }
+  if(isAdmin&&!fam){const a=h('button','rc g','⚙ Salons');a.onclick=openRooms;b.append(a)}
   const cur=rooms.find(x=>x.id===room);$('#rt').textContent=cur?cur.emoji+' '+cur.name:'Discussion';
 }
 let st0;$('#sq').oninput=()=>{clearTimeout(st0);st0=setTimeout(()=>loadChat($('#sq').value.trim()),400)};
@@ -881,7 +943,7 @@ function drawActions(id){
   };
   const cp=h('button','g','Changer mon mot de passe');cp.type='button';
   cp.onclick=()=>{$('#pd').close();$('#rcd').showModal()};
-  $('#pse').parentElement.after(cp);
+  $('#pdp').append(cp);
 }
 $('#npc').onclick=()=>$('#rcd').close();
 $('#npb').onclick=async()=>{
@@ -914,8 +976,24 @@ mkInst($('#auth'));mkInst($('#pd'));showInstall();
 /* Clavier (mobile) : on libère l'écran pendant la saisie */
 {
   const isField=e=>e&&(e.tagName==='TEXTAREA'||(e.tagName==='INPUT'&&!/^(file|checkbox|radio|button)$/.test(e.type)));
-  document.addEventListener('focusin',e=>{if(matchMedia('(max-width:760px)').matches&&isField(e.target))document.body.classList.add('kb')});
-  document.addEventListener('focusout',()=>setTimeout(()=>{if(!isField(document.activeElement))document.body.classList.remove('kb')},150));
+  const touch=()=>matchMedia('(max-width:760px),(pointer:coarse)').matches;
+  let maxH=innerHeight,field=false,shrunk=false,kbT=0,cur='';
+  const apply=()=>{
+    const on=touch()&&(field||shrunk),c=field?cur:'';
+    document.body.classList.toggle('kb',on);
+    document.body.classList.toggle('kbs',on&&c==='sq');
+    document.body.classList.toggle('kbp',on&&(c==='pi'||c==='po'));
+  };
+  document.addEventListener('focusin',e=>{if(isField(e.target)){clearTimeout(kbT);field=true;cur=e.target.id||'';apply()}});
+  document.addEventListener('focusout',e=>{
+    const rel=e.relatedTarget,inForm=!!(rel&&rel.closest&&rel.closest('form'));
+    clearTimeout(kbT);
+    kbT=setTimeout(()=>{const a=document.activeElement;field=isField(a);cur=field?(a.id||''):'';apply()},inForm?900:150);
+  });
+  const vv=()=>{const h=window.visualViewport?visualViewport.height:innerHeight;if(h>maxH)maxH=h;shrunk=h<maxH*0.8;apply()};
+  addEventListener('resize',vv);
+  if(window.visualViewport)visualViewport.addEventListener('resize',vv);
+  addEventListener('orientationchange',()=>setTimeout(()=>{maxH=innerHeight;vv()},400));
 }
 
 /* Sons de notification (application ouverte) */
@@ -943,12 +1021,43 @@ const viewing=id=>!document.hidden&&document.hasFocus()&&!$('#'+id).classList.co
   c.onchange=()=>{soundOn=c.checked;try{localStorage.setItem('snd',soundOn?'1':'0')}catch(e){}};
   const t=h('button','g','Tester');t.type='button';t.onclick=()=>{unlockAudio();ding()};
   l.append(c,'🔔 Son des nouveaux messages',t);
-  $('#pse').parentElement.after(l);
+  $('#pdp').append(l);
 }
+
+/* Gestion des salons (admin) */
+function openRooms(){
+  const box=$('#rml');box.replaceChildren();
+  rooms.forEach(x=>{
+    const row=h('div','rmr'),e=h('input'),n=h('input'),sv=h('button','sm','Enregistrer'),dl=h('button','sm dng','Supprimer');
+    e.value=x.emoji;e.maxLength=4;n.value=x.name;n.maxLength=40;
+    sv.onclick=async()=>{
+      if(!n.value.trim())return alert('Le nom ne peut pas être vide.');
+      const {error}=await sb.rpc('admin_rename_room',{rid:x.id,rname:n.value.trim(),remoji:e.value.trim()});
+      if(error)alert(em(error));else{await loadRooms();openRooms()}
+    };
+    dl.onclick=async()=>{
+      if(!confirm('Supprimer le salon « '+x.name+' » et tous ses messages ?'))return;
+      const {error}=await sb.rpc('admin_delete_room',{rid:x.id});
+      if(error)alert(em(error));else{await loadRooms();loadChat();openRooms()}
+    };
+    row.append(e,n,sv);
+    if(x.kind==='public'&&x.id!==1)row.append(dl);
+    else row.append(h('span','who',x.kind==='family'?'🔒 privé':'fixe'));
+    box.append(row);
+  });
+  if(!$('#rmd').open)$('#rmd').showModal();
+}
+$('#rmc').onclick=()=>$('#rmd').close();
+$('#rna').onclick=async()=>{
+  const n=$('#rnn').value.trim();if(!n)return alert('Écrivez le nom du salon.');
+  const {error}=await sb.rpc('admin_create_room',{rname:n,remoji:$('#rne').value.trim()});
+  if(error)return alert(em(error));
+  $('#rnn').value='';$('#rne').value='';await loadRooms();openRooms();
+};
 
 /* Profil */
 let draft='';
-function drawPrev(){$('#prev').replaceChildren(avx(draft,$('#pn').value||nm(me.id),me.id,56))}
+function drawPrev(){$('#prev').replaceChildren(avx(draft,$('#pn').value||nm(me.id),me.id,76))}
 ['😀','😎','🦁','🐯','🦊','🐼','🌟','🚀','🌿','☕','⚽','🎧'].forEach(e=>{
   const b=h('button','',e);b.type='button';b.onclick=()=>{draft=e;drawPrev()};$('#er').append(b);
 });
